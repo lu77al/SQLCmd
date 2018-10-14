@@ -25,19 +25,19 @@ public class JDBCManager implements DatabaseManager {
 
         clear("user");
 
-        TableRecord record = new TableRecord();
+        DataSet record = new DataSet();
         record.put("name", "Vasya");
         record.put("password", "PAROL");
         create(record);
 
         String tableName = "user";
 
-        TableRecord[] result = getTableRecords(tableName);
+        DataSet[] result = getTableRecords(tableName);
         System.out.println(Arrays.toString(result));
 
-        TableRecord updateRec = new TableRecord();
+        DataSet updateRec = new DataSet();
         updateRec.put("password", "******");
-        TableRecord whereRec = new TableRecord();
+        DataSet whereRec = new DataSet();
         whereRec.put("name", "Vasya");
 
         update(updateRec, whereRec);
@@ -72,16 +72,16 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public TableRecord[] getTableRecords(String tableName) {
+    public DataSet[] getTableRecords(String tableName) {
         try {
             int size = getTableSize(tableName);
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(String.format("SELECT * FROM public.%s ORDER BY name ASC", tableName));
             ResultSetMetaData rsmd = rs.getMetaData();
-            TableRecord[] result = new TableRecord[size];
+            DataSet[] result = new DataSet[size];
             int index = 0;
             while (rs.next()) {
-                TableRecord rec = new TableRecord();
+                DataSet rec = new DataSet();
                 result[index++] = rec;
                 for (int i = 1; i <= rsmd.getColumnCount(); i++) {
                     rec.put(rsmd.getColumnName(i), rs.getObject(i));
@@ -92,7 +92,7 @@ public class JDBCManager implements DatabaseManager {
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            return new TableRecord[0];
+            return new DataSet[0];
         }
     }
 
@@ -167,7 +167,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void create(TableRecord record) {
+    public void create(DataSet record) {
         try {
             String names = "";
             for (String name: record.getNames()) {
@@ -188,7 +188,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void update(TableRecord update, TableRecord where) {
+    public void update(DataSet update, DataSet where) {
         try {
             String updateSQL = "";
             String[] names = update.getNames();

@@ -26,12 +26,12 @@ public class JDBCManagerTest {
     @Test
     public void testGetTableData() {
         dbManager.clear("user");
-        TableRecord record = new TableRecord();
+        DataSet record = new DataSet();
         record.put("name", "Vasya");
         record.put("password", "PAROL");
         dbManager.create(record);
 
-        TableRecord[] users = dbManager.getTableRecords("user");
+        DataSet[] users = dbManager.getTableRecords("user");
         assertEquals(1, users.length);
 
         assertEquals("[name, password]", Arrays.toString(users[0].getNames()));
@@ -42,18 +42,18 @@ public class JDBCManagerTest {
     @Test
     public void testUpdateData() {
         dbManager.clear("user");
-        TableRecord record = new TableRecord();
+        DataSet record = new DataSet();
         record.put("name", "Vasya");
         record.put("password", "PAROL");
         dbManager.create(record);
 
-        TableRecord updateRecord = new TableRecord();
+        DataSet updateRecord = new DataSet();
         updateRecord.put("password", "baraban");
-        TableRecord whereRecord = new TableRecord();
+        DataSet whereRecord = new DataSet();
         whereRecord.put("name", "Vasya");
         dbManager.update(updateRecord, whereRecord);
 
-        TableRecord[] users = dbManager.getTableRecords("user");
+        DataSet[] users = dbManager.getTableRecords("user");
         assertEquals(1, users.length);
 
         assertEquals("[name, password]", Arrays.toString(users[0].getNames()));

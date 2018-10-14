@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd;
 
 public interface DatabaseManager {
-    TableRecord[] getTableRecords(String tableName);
+    DataSet[] getTableRecords(String tableName);
 
     String[] getTableNames();
 
@@ -9,7 +9,7 @@ public interface DatabaseManager {
 
     void clear(String tableName);
 
-    void create(TableRecord record);
+    void create(DataSet record);
 
-    void update(TableRecord update, TableRecord where);
+    void update(DataSet update, DataSet where);
 }

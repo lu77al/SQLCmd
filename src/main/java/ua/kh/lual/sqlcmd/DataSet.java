@@ -2,7 +2,7 @@ package ua.kh.lual.sqlcmd;
 
 import java.util.Arrays;
 
-public class TableRecord {
+public class DataSet {
 
     private class Data {
         private String name;
@@ -22,24 +22,36 @@ public class TableRecord {
         }
     }
 
-    private Data[] data = new Data[100];
-    private int index = 0;
+    private final int sizeStep = 10;
+    private Data[] data = new Data[sizeStep];
+    private int newIndex = 0;
 
-    public void put(String columnName, Object value) {
-        data[index++] = new Data(columnName, value);
+    public void put(String name, Object value) {
+        for (int i = 0; i < newIndex ; i++) {
+            if (data[i].getName().equals(name)) {
+                data [i].value = value;
+                return;
+            }
+        }
+        if (newIndex >= data.length) {
+            Data[] newdata = new Data[data.length + sizeStep];
+            System.arraycopy(data, 0, newdata, 0, data.length);
+            data = newdata;
+        }
+        data[newIndex++] = new Data(name, value);
     }
 
     public Object[] getValues() {
-        Object[] result = new Object[index];
-        for (int i = 0; i < index ; i++) {
+        Object[] result = new Object[newIndex];
+        for (int i = 0; i < newIndex; i++) {
             result[i] = data[i].getValue();
         }
         return result;
     }
 
     public String[] getNames() {
-        String[] result = new String[index];
-        for (int i = 0; i < index ; i++) {
+        String[] result = new String[newIndex];
+        for (int i = 0; i < newIndex; i++) {
             result[i] = data[i].getName();
         }
         return result;
@@ -47,7 +59,7 @@ public class TableRecord {
 
     @Override
     public String toString() {
-        return "TableRecord{\n" +
+        return "DataSet{\n" +
                 "names:" + Arrays.toString(getNames()) + "\n" +
                 "values:" + Arrays.toString(getValues()) + "\n" +
                 "}";
