@@ -1,11 +1,14 @@
-package ua.kh.lual.sqlcmd;
+package ua.kh.lual.sqlcmd.model;
 
 
 import java.sql.*;
 import java.util.Arrays;
 
+import static ua.kh.lual.sqlcmd.model.MyUtils.resizeArray;
+
 public class JDBCManager implements DatabaseManager {
     private Connection connection;
+    private String table;
 
     public static void main(String[] argv) throws ClassNotFoundException, SQLException {
         JDBCManager db = new JDBCManager();
@@ -72,9 +75,105 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
+    public void connect(String database, String user, String password) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Please add postgresql-42.2.5.jar to project");
+        }
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/" + database, user, password);
+        } catch (SQLException e) {
+            System.out.println(String.format("Can't get connection for database:%s user:%s password:%s", database, user, password ));
+            e.printStackTrace();
+            connection = null;
+        }
+    }
+
+    @Override
+    public String[] getTableNames() {
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables" +
+                    " WHERE table_schema='public' AND table_type='BASE TABLE'");
+            String[] tables = new String[20];
+            int index = 0;
+            while (rs.next()) {
+                if (index >= tables.length) {
+                    tables = resizeArray(tables, tables.length + 20);
+                }
+                tables[index++] = rs.getString("table_name");
+            }
+            tables = resizeArray(tables, index);
+                            // tables = Arrays.copyOf(tables, index, String[].class); - possible variant
+            rs.close();
+            st.close();
+            return tables;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new String[0];
+        }
+    }
+
+    @Override
+    public void selectTable(String tableName) {
+        table = tableName;
+    }
+
+    @Override
+    public String[] getColumnNames() {
+        try {
+            PreparedStatement st = connection.prepareStatement(String.format("SELECT * FROM public.%s WHERE false", table));
+            ResultSetMetaData md = st.getMetaData();
+            String[] columnNames = new String[md.getColumnCount()];
+            for (int i = 0; i < columnNames.length; i++) {
+                columnNames[i] = md.getColumnName(i + 1);
+            }
+            st.close();
+            return columnNames;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new String[0];
+        }
+    }
+
+    @Override
+    public Object[][] getTableData() {
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM public.%s", table));
+            Object[][] data = new Object[getTableSize()][rs.getMetaData().getColumnCount()];
+            for (int rowIndex = 0; rowIndex < data.length; rowIndex++) {
+                if (!rs.next()) throw new SQLException();
+                for (int colImdex = 1; colImdex <= data[0].length ; colImdex++) {
+                    data[rowIndex][colImdex - 1] = rs.getObject(colImdex);
+                }
+            }
+            rs.close();
+            st.close();
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Object[0][0];
+        }
+    }
+
+    private int getTableSize() throws SQLException {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(String.format("SELECT COUNT(*) FROM public.%s", table));
+        rs.next();
+        int size = rs.getInt(1);
+        rs.close();
+        st.close();
+        return size;
+    }
+
+    @Override
     public DataSet[] getTableRecords(String tableName) {
         try {
-            int size = getTableSize(tableName);
+            int size = getTableSize();
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(String.format("SELECT * FROM public.%s ORDER BY name ASC", tableName));
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -96,53 +195,6 @@ public class JDBCManager implements DatabaseManager {
         }
     }
 
-    private int getTableSize(String tableName) throws SQLException {
-        Statement st = connection.createStatement();
-        ResultSet rsCount = st.executeQuery(String.format("SELECT COUNT(*) FROM public.%s", tableName));
-        rsCount.next();
-        int size = rsCount.getInt(1);
-        rsCount.close();
-        return size;
-    }
-
-    @Override
-    public String[] getTableNames() {
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'");
-            String[] tables = new String[100];
-            int index = 0;
-            while (rs.next()) {
-                tables[index++] = rs.getString("table_name");
-            }
-            tables = Arrays.copyOf(tables, index, String[].class);
-            rs.close();
-            st.close();
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new String[0];
-        }
-    }
-
-    @Override
-    public void connect(String database, String user, String password) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Please add JDBC jar to project. ");
-        }
-        try {
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/" + database, user,
-                    password);
-        } catch (SQLException e) {
-            System.out.println(String.format("Can't get connection for database:%s user:%s password:%s", database, user, password ));
-            e.printStackTrace();
-            connection = null;
-        }
-    }
 
     private static void selectSQL(Connection connection, String sqlrec) throws SQLException {
         Statement st = connection.createStatement();
@@ -180,7 +232,7 @@ public class JDBCManager implements DatabaseManager {
             }
             values = values.substring(0, values.length() - 1);
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("INSERT INTO public.user (" + names + ") VALUES (" + values + ")");
+            stmt.executeUpdate("INSERT INTO public.users (" + names + ") VALUES (" + values + ")");
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package ua.kh.lual.sqlcmd;
+package ua.kh.lual.sqlcmd.model;
 
 public interface DatabaseManager {
     DataSet[] getTableRecords(String tableName);
@@ -6,6 +6,12 @@ public interface DatabaseManager {
     String[] getTableNames();
 
     void connect(String database, String user, String password);
+
+    void selectTable(String tableName);
+
+    String[] getColumnNames();
+
+    Object[][] getTableData();
 
     void clear(String tableName);
 
