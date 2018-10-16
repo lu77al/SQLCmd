@@ -26,6 +26,10 @@ public class DataSet {
     private Data[] data = new Data[sizeStep];
     private int length = 0;
 
+    public int getLength() {
+        return length;
+    }
+
     public void put(String name, Object value) {
         for (int i = 0; i < length; i++) {
             if (data[i].getName().equals(name)) {
@@ -65,8 +69,6 @@ public class DataSet {
         }
         return null;
     }
-
-
 
     @Override
     public String toString() {

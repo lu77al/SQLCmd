@@ -12,12 +12,19 @@ import static org.junit.Assert.assertEquals;
 
 public class JDBCManagerTest {
 
+    private static final String database =  "sqlcmd";
+    private static final String user =      "postgres";
+    private static final String password =  "12345";
+    private static final String tableName = "users";
+
     private DatabaseManager dbManager;
+
 
     @Before
     public void setup() {
         dbManager = new JDBCManager();
-        dbManager.connect("sqlcmd", "postgres", "12345");
+        dbManager.connect(database, user, password);
+        dbManager.selectTable(tableName);
     }
 
     @Test
@@ -28,63 +35,32 @@ public class JDBCManagerTest {
 
     @Test
     public void testGetColumnNames() {
-        dbManager.selectTable("users");
         assertEquals("[id, name, password]", Arrays.toString(dbManager.getColumnNames()));
     }
 
     @Test
     public void testAddGetTableData() {
-        dbManager.selectTable("users");
-        dbManager.clear("users");
+        dbManager.clearTable();
         DataSet record = new DataSet();
         record.put("id", 1);
         record.put("name", "Vasya");
         record.put("password", "PAROL");
-        dbManager.create(record);
+        dbManager.addRow(record);
         record.put("id", 2);
         record.put("name", "Manya");
         record.put("password", "parol");
-        dbManager.create(record);
+        dbManager.addRow(record);
         assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getTableData()));
     }
 
-/*
     @Test
-    public void testGetTableData() {
-        DataSet record = new DataSet();
-        record.put("name", "Vasya");
-        record.put("password", "PAROL");
-        dbManager.create(record);
-
-        DataSet[] users = dbManager.getTableRecords("user");
-        assertEquals(1, users.length);
-
-        assertEquals("[name, password]", Arrays.toString(users[0].getNames()));
-        assertEquals("[Vasya, PAROL]", Arrays.toString(users[0].getValues()));
-
-    }
-*/
-
-    @Test
-    public void testUpdateData() {
-        dbManager.clear("users");
-        DataSet record = new DataSet();
-        record.put("name", "Vasya");
-        record.put("password", "PAROL");
-        dbManager.create(record);
-
+    public void testUpdateTable() {
+        testAddGetTableData();
         DataSet updateRecord = new DataSet();
         updateRecord.put("password", "baraban");
         DataSet whereRecord = new DataSet();
         whereRecord.put("name", "Vasya");
-        dbManager.update(updateRecord, whereRecord);
-
-        DataSet[] users = dbManager.getTableRecords("user");
-        assertEquals(1, users.length);
-
-        assertEquals("[name, password]", Arrays.toString(users[0].getNames()));
-        assertEquals("[Vasya, baraban]", Arrays.toString(users[0].getValues()));
-
+        dbManager.updateTable(updateRecord, whereRecord);
+        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getTableData()));
     }
-
 }
