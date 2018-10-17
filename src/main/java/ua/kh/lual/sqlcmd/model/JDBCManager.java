@@ -116,7 +116,7 @@ public class JDBCManager implements DatabaseManager {
 
     private int getTableSize() throws SQLException {
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(String.format("SELECT COUNT(*) FROM public.%s", selectedTable));
+        ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable);
         rs.next();
         int size = rs.getInt(1);
         rs.close();
