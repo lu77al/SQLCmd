@@ -33,7 +33,8 @@ public class Controller {
             } else if (command.equals("find") | command.startsWith("find|")) {
                 doFind(command);
             } else if (command.equals("exit")) {
-                view.write("See you later");
+                view.write("Bye");
+                view.write("See you later ;)");
                 System.exit(0);
             } else {
                 view.write("Unknown command");
@@ -88,7 +89,7 @@ public class Controller {
 
         view.write("\tfind|[table_name]");
         view.write("\t\t- select table and show it's contents");
-        view.write("\t\t- if <table_name> is omitted, content of already selected table is shown");
+        view.write("\t\t- if <table_name> is omitted, contents of already selected table is shown");
 
         view.write("\texit");
         view.write("\t\t- exit application");
