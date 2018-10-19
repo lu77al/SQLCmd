@@ -28,18 +28,73 @@ public class Controller {
                 doList();
             } else if (command.equals("help")) {
                 doHelp();
+            } else if (command.startsWith("select|")) {
+                doSelect(command);
+            } else if (command.equals("find") | command.startsWith("find|")) {
+                doFind(command);
+            } else if (command.equals("exit")) {
+                view.write("See you later");
+                System.exit(0);
             } else {
                 view.write("Unknown command");
             }
         }
     }
 
+    private void doFind(String command) {
+        String[] chunks = command.split("\\|");
+        if (chunks.length > 1) {
+            String tableName = chunks[1];
+            selectTable(tableName);
+        }
+        String[] columnNames = dbManager.getColumnNames();
+        view.write(rowToString(columnNames));
+        view.write("---------------------------");
+        Object[][] tableData = dbManager.getTableData();
+        for (Object[] row: tableData) {
+            view.write(rowToString(row));
+        }
+    }
+
+    private String rowToString(Object[] items) {
+        StringBuilder result = new StringBuilder("| ");
+        for (Object item: items) {
+            result.append(item);
+            result.append(" |\t");
+        }
+        return result.toString();
+    }
+
+
+    private void doSelect(String command) {
+        String[] chunks = command.split("\\|");
+        String tableName = chunks[1];
+        selectTable(tableName);
+    }
+
+    private void selectTable(String tableName) {
+        dbManager.selectTable(tableName);
+        view.write(String.format("Table <%s> is selected", tableName));
+    }
+
     private void doHelp() {
         view.write("You can use next commands:");
+
         view.write("\tlist");
-        view.write("\t\tget tables names of connected database");
+        view.write("\t\t- get tables names of connected database");
+
+        view.write("\tselect|table_name");
+        view.write("\t\t- select table for consequent actions");
+
+        view.write("\tfind|[table_name]");
+        view.write("\t\t- select table and show it's contents");
+        view.write("\t\t- if <table_name> is omitted, content of already selected table is shown");
+
+        view.write("\texit");
+        view.write("\t\t- exit application");
+
         view.write("\thelp");
-        view.write("\t\tshow this list in console");
+        view.write("\t\t- show this list in console");
     }
 
     private void doList() {
@@ -62,7 +117,7 @@ public class Controller {
                 String user = chunk[1];
                 String password = chunk[2];
                 dbManager.connect(database, user, password);
-                view.write(String.format("User [%s] successfully connected to database [%s]", user, database));
+                view.write(String.format("User <%s> successfully connected to database <%s>", user, database));
                 break;
             } catch (Exception e) {
                 view.write("Connection failed");
