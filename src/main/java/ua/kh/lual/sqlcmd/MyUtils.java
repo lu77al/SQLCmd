@@ -13,4 +13,14 @@ public class MyUtils {
         System.arraycopy(arr, 0, newArr, 0, Math.min(arr.length,newLength));
         return newArr;
     }
+
+    public static String rowToString(Object[] items) {
+        StringBuilder result = new StringBuilder("| ");
+        for (Object item: items) {
+            result.append(item);
+            result.append(" |\t");
+        }
+        return result.toString();
+    }
+
 }

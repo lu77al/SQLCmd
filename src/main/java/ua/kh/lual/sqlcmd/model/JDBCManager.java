@@ -136,8 +136,8 @@ public class JDBCManager implements DatabaseManager {
 
     private String prepareList(String item, Object[] values) {
         StringBuilder list = new StringBuilder();
-        for (int i = 0; i < values.length; i++) {
-            list.append(String.format(item, values[i].toString()));
+        for (Object value : values) {
+            list.append(String.format(item, value.toString()));
             list.append(", ");
         }
         return list.substring(0, list.length() - 2);
