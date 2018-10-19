@@ -3,7 +3,7 @@ package ua.kh.lual.sqlcmd.model;
 
 import java.sql.*;
 
-import static ua.kh.lual.sqlcmd.model.MyUtils.resizeArray;
+import static ua.kh.lual.sqlcmd.MyUtils.resizeArray;
 
 public class JDBCManager implements DatabaseManager {
 
@@ -15,16 +15,16 @@ public class JDBCManager implements DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Please add postgresql-42.2.5.jar to project");
+            throw new RuntimeException("Please add postgresql-42.2.5.jar to project", e);
         }
         try {
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/" + database, user, password);
         } catch (SQLException e) {
-            System.out.println(String.format("Can't get connection for database:%s user:%s password:%s", database, user, password ));
-            e.printStackTrace();
             connection = null;
+            throw new RuntimeException(
+                    String.format("Can't get connection for database:%s user:%s password:%s",
+                    database, user, password ), e);
         }
     }
 

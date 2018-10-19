@@ -3,7 +3,6 @@ package ua.kh.lual.sqlcmd.view;
 import java.util.Scanner;
 
 public class Console implements View {
-
     @Override
     public void write(String message) {
         System.out.println(message);
@@ -15,3 +14,4 @@ public class Console implements View {
         return scanner.nextLine();
     }
 }
+
