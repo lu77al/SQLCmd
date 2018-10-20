@@ -1,4 +1,4 @@
-package ua.kh.lual.sqlcmd;
+package ua.kh.lual.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +8,7 @@ import ua.kh.lual.sqlcmd.model.JDBCManager;
 
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class JDBCManagerTest {
@@ -63,4 +64,10 @@ public class JDBCManagerTest {
         dbManager.updateTable(updateRecord, whereRecord);
         assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getTableData()));
     }
+
+    @Test
+    public void testIsConnected() {
+        assertTrue(dbManager.isConnected());
+    }
+
 }

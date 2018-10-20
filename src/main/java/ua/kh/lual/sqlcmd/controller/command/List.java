@@ -11,7 +11,7 @@ public class List extends UserCommand {
 
     @Override
     public String description() {
-        return "Prints table names of connected database";
+        return "Prints table names of isConnected database";
     }
 
     @Override

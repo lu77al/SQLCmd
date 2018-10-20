@@ -115,7 +115,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public boolean connected() {
+    public boolean isConnected() {
         return connection != null;
     }
 

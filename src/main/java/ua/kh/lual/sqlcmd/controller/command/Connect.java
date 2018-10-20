@@ -27,7 +27,7 @@ public class Connect extends UserCommand {
             String user = chunk[2];
             String password = chunk[3];
             dbManager.connect(database, user, password);
-            view.write(String.format("User <%s> successfully connected to database <%s>", user, database));
+            view.write(String.format("User <%s> successfully isConnected to database <%s>", user, database));
         } catch (Exception e) {
             view.write("Connection failed");
             view.write("Reason: " +e.getMessage());

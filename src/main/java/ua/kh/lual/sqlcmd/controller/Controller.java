@@ -36,7 +36,9 @@ public class Controller {
             view.write("");
             view.write("Enter command (<help> for commands list)");
             String userInput = view.read();
-            executeUserCommand(userInput);
+            if (userInput.length() > 0) {
+                executeUserCommand(userInput);
+            }
         }
     }
 
