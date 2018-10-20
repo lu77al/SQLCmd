@@ -4,10 +4,15 @@ import ua.kh.lual.sqlcmd.MyUtils;
 
 public class Find extends UserCommand {
 
-    public Find() {
-        format = "find|[table_name]";
-        description = "Prints content of selected table!NL" +
-                      "if <table_name> is specified, it becomes selected at first";
+    @Override
+    public String format() {
+        return "find|[table_name]";
+    }
+
+    @Override
+    public String description() {
+        return  "Prints content of selected table" + "!NL" +
+                "if <table_name> is specified, it becomes selected at first";
     }
 
     @Override

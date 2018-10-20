@@ -4,9 +4,14 @@ public class Help extends UserCommand {
 
     UserCommand[] commandList;
 
-    public Help() {
-        format = "help";
-        description = "Prints this brief commands summary";
+    @Override
+    public String format() {
+        return "help";
+    }
+
+    @Override
+    public String description() {
+        return "Prints this brief commands summary";
     }
 
     public void setCommandList(UserCommand[] commandList) {
@@ -23,8 +28,8 @@ public class Help extends UserCommand {
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
             if (cmd == null) break;
-            view.write("\t" + cmd.getFormat());
-            String[] descriptions = cmd.getDescription().split("!NL");
+            view.write("\t" + cmd.format());
+            String[] descriptions = cmd.description().split("!NL");
             for (String description: descriptions) {
                 view.write("\t\t" + description);
             }

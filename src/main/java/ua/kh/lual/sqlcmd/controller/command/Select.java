@@ -2,9 +2,14 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 public class Select extends UserCommand {
 
-    public Select() {
-        format = "select|table_name";
-        description = "Selects table <table_name> for consequent manipulations";
+    @Override
+    public String format() {
+        return "select|table_name";
+    }
+
+    @Override
+    public String description() {
+        return "Selects table <table_name> for consequent manipulations";
     }
 
     @Override

@@ -2,9 +2,14 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 public class Exit extends UserCommand {
 
-    public Exit() {
-        format = "exit";
-        description = "Terminates application";
+    @Override
+    public String format() {
+        return "exit";
+    }
+
+    @Override
+    public String description() {
+        return "Terminates application";
     }
 
     @Override

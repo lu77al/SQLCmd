@@ -4,9 +4,14 @@ import java.util.Arrays;
 
 public class List extends UserCommand {
 
-    public List() {
-        format = "list";
-        description = "Prints table names of connected database";
+    @Override
+    public String format() {
+        return "list";
+    }
+
+    @Override
+    public String description() {
+        return "Prints table names of connected database";
     }
 
     @Override
