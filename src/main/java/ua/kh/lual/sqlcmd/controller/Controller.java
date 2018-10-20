@@ -32,6 +32,14 @@ public class Controller {
 
     public void run() {
         view.write("Hello. Your are using SQLcmd application");
+        try {
+            mainLoop();
+        } catch (Exception e) {
+            // Nothing
+        }
+    }
+
+    private void mainLoop() {
         while (true) {
             view.write("");
             view.write("Enter command (<help> for commands list)");

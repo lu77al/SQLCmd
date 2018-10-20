@@ -21,7 +21,7 @@ public class Exit extends UserCommand {
     public void process(String command) {
         view.write("Bye");
         view.write("See you later ;)");
-        System.exit(0);
+        throw new ExitException();
     }
 
     @Override

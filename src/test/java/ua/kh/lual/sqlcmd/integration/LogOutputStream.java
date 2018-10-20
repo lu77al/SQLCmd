@@ -6,11 +6,15 @@ import java.io.PrintStream;
 
 public class LogOutputStream extends OutputStream {
 
-    private StringBuilder log = new StringBuilder();
+    private static StringBuilder log = new StringBuilder();
 
     @Override
     public void write(int b) throws IOException {
         log.append((char)b);
 
+    }
+
+    public String getLog() {
+        return log.toString();
     }
 }
