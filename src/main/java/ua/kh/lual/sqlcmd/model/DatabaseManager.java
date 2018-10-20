@@ -18,4 +18,5 @@ public interface DatabaseManager {
 
     void updateTable(DataSet update, DataSet where);
 
+    boolean connected();
 }

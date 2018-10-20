@@ -27,7 +27,6 @@ public class Help extends UserCommand {
     public void process(String command) {
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
-            if (cmd == null) break;
             view.write("\t" + cmd.format());
             String[] descriptions = cmd.description().split("!NL");
             for (String description: descriptions) {

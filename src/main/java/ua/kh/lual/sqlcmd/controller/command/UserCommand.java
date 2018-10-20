@@ -18,5 +18,4 @@ public abstract class UserCommand {
     public static void setDbManager(DatabaseManager dbManager) {
         UserCommand.dbManager = dbManager;
     }
-
 }

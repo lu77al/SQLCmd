@@ -114,6 +114,11 @@ public class JDBCManager implements DatabaseManager {
         executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
     }
 
+    @Override
+    public boolean connected() {
+        return connection != null;
+    }
+
     private int getTableSize() throws SQLException {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable);
