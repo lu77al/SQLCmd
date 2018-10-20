@@ -21,6 +21,6 @@ public abstract class UserCommand {
     }
 
     public boolean requestsConnection() {
-        return !dbManager.connected();
+        return !dbManager.isConnected();
     }
 }
