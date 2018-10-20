@@ -5,13 +5,19 @@ import java.util.Scanner;
 
 public class Console implements View {
 
+    private static String bold = "\033[1;33m";
+    private static String normal = "\033[0;37m";
 
+    public static void suppressFormating() {
+        bold = "";
+        normal = "";
+    }
 
     @Override
     public void write(String message) {
-        String toPrint = "\033[0;37m" +
-                         message.replaceAll("<", "\033[1;33m").
-                                 replaceAll(">", "\033[0;37m");
+        String toPrint = normal +
+                         message.replaceAll("<", bold).
+                                 replaceAll(">", normal);
         System.out.println(toPrint);
     }
 
