@@ -36,4 +36,10 @@ public class Connect extends UserCommand {
             }
         }
     }
+
+    @Override
+    public boolean requestsConnection() {
+        return false;
+    }
+
 }

@@ -21,11 +21,11 @@ public class Controller {
         Help help = new Help();
         this.commands = new UserCommand[]{
                 new Connect(),
-                help,
-                new Exit(),
                 new List(),
                 new Select(),
                 new Find(),
+                new Exit(),
+                help
         };
         help.setCommandList(commands);
     }
@@ -41,14 +41,13 @@ public class Controller {
     }
 
     private void executeUserCommand(String userInput) {
-        for (int commandIndex = 0; commandIndex < commands.length; commandIndex++) {
-            UserCommand command = commands[commandIndex];
+        for (UserCommand command : commands) {
             if (command.canProcess(userInput)) {
-                if ((commandIndex <= 2) | dbManager.connected()) {
-                    command.process(userInput);
-                } else {
+                if (command.requestsConnection()) {
                     view.write("Please connect to database before using command " + command);
                     view.write("\tUse command <" + new Connect().format());
+                } else {
+                    command.process(userInput);
                 }
                 return;
             }

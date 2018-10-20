@@ -34,4 +34,10 @@ public class Help extends UserCommand {
             }
         }
     }
+
+    @Override
+    public boolean requestsConnection() {
+        return false;
+    }
+
 }

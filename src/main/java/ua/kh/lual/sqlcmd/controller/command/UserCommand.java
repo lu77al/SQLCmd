@@ -15,7 +15,12 @@ public abstract class UserCommand {
     public static void setView(View view) {
         UserCommand.view = view;
     }
+
     public static void setDbManager(DatabaseManager dbManager) {
         UserCommand.dbManager = dbManager;
+    }
+
+    public boolean requestsConnection() {
+        return !dbManager.connected();
     }
 }

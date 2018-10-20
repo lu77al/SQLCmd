@@ -23,4 +23,10 @@ public class Exit extends UserCommand {
         view.write("See you later ;)");
         System.exit(0);
     }
+
+    @Override
+    public boolean requestsConnection() {
+        return false;
+    }
+
 }
