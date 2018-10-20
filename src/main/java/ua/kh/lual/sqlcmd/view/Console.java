@@ -5,7 +5,10 @@ import java.util.Scanner;
 public class Console implements View {
     @Override
     public void write(String message) {
-        System.out.println(message);
+        String toPrint = "\033[0;37m" +
+                         message.replaceAll("<", "\033[1;33m").
+                                 replaceAll(">", "\033[0;37m");
+        System.out.println(toPrint);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class Controller {
                     command.process(userInput);
                 } else {
                     view.write("Please connect to database before using command " + command);
-                    view.write("\tUse command " + new Connect().format());
+                    view.write("\tUse command <" + new Connect().format());
                 }
                 return;
             }
