@@ -16,37 +16,48 @@ public class IntegrationTest {
     private static PreparedInputStream in;
     private static ByteArrayOutputStream out;
 
-    static final String database = "sqlcmd";
-    static final String user = "postgres";
-    static final String password = "12345";
+    private static final String database = "sqlcmd";
+    private static final String user = "postgres";
+    private static final String password = "12345";
+
+    private String expected;
+
+    @BeforeClass
+    public static void setup() {
+        in = new PreparedInputStream();
+        System.setIn(in);
+        ua.kh.lual.sqlcmd.view.Console.suppressFormating();
+    }
 
     @Before
-    public void setup() {
-        in = new PreparedInputStream();
+    public void clearOutput() {
         out = new ByteArrayOutputStream();
-        System.setIn(in);
         System.setOut(new PrintStream(out));
-        ua.kh.lual.sqlcmd.view.Console.suppressFormating();
     }
 
     @Test
     public void testExit() {
-        in.add("exit");
-        String expected =
+        // given
+        in.userTypes("exit");
+        // after
+        expected =
             "Hello. Your are using SQLcmd application\n" +
             "\n" +
             "Enter command (help for commands list)\n" +
             "exit\n" +
             "Bye\n" +
             "See you later ;)\n";
-        performTest(expected);
+        // execute and check
+        performTest();
     }
 
     @Test
     public void testUnknown() {
-        in.add("something");
-        in.add("exit");
-        String expected =
+        // given
+        in.userTypes("something");
+        in.userTypes("exit");
+        // after
+        expected =
             "Hello. Your are using SQLcmd application\n" +
             "\n" +
             "Enter command (help for commands list)\n" +
@@ -57,14 +68,17 @@ public class IntegrationTest {
             "exit\n" +
             "Bye\n" +
             "See you later ;)\n";
-        performTest(expected);
+        // execute and check
+        performTest();
     }
 
     @Test
     public void testConnect() {
-        in.add("connect|" + database + "|" + user + "|" + password);
-        in.add("exit");
-        String expected =
+        // given
+        in.userTypes("connect|" + database + "|" + user + "|" + password);
+        in.userTypes("exit");
+        // after
+        expected =
             "Hello. Your are using SQLcmd application\n" +
             "\n" +
             "Enter command (help for commands list)\n" +
@@ -75,12 +89,13 @@ public class IntegrationTest {
             "exit\n" +
             "Bye\n" +
             "See you later ;)\n";
-        performTest(expected);
+        // execute and check
+        performTest();
     }
 
-    private void performTest(String expected) {
+    private void performTest() {
         Main.main(new String[0]);
-        String actual = getLog().replaceAll("\r", "");
+        String actual = getLog().replaceAll("\r\n", "\n").replaceAll("\r", "\n");
         assertEquals(expected, actual);
     }
 

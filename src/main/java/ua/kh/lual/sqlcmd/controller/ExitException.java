@@ -1,4 +1,4 @@
-package ua.kh.lual.sqlcmd.controller.command;
+package ua.kh.lual.sqlcmd.controller;
 
 public class ExitException extends RuntimeException {
 }

@@ -1,5 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import ua.kh.lual.sqlcmd.controller.ExitException;
+
 public class Exit extends UserCommand {
 
     @Override
