@@ -17,17 +17,17 @@ public class PreparedInputStream extends InputStream {
             userInput = userInput.substring(1);
             result = (short)ch;
         }
-        if (result == (short)'\n') {
+        if (result == -1) {
             System.out.println(appOutput.toString());
             appOutput.setLength(0);
-        } else if (result != - 1) {
+        } else if (result != '\n' & result != '\r') {
             appOutput.append((char)result);
         }
         return result;
     }
 
     public void userTypes(String line) {
-        userInput += line + "\n\uffff";
+        userInput += line + System.lineSeparator() + "\uffff";
     }
 
     public void clear() {
