@@ -3,24 +3,15 @@ package ua.kh.lual.sqlcmd.controller.command;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
-public abstract class UserCommand {
-    public abstract String format();
-    public abstract String description();
-    public abstract boolean canProcess(String command);
-    public abstract void process(String command);
+public interface UserCommand {
 
-    static View view;
-    static DatabaseManager dbManager;
+    String format();
 
-    public static void setView(View view) {
-        UserCommand.view = view;
-    }
+    String description();
 
-    public static void setDbManager(DatabaseManager dbManager) {
-        UserCommand.dbManager = dbManager;
-    }
+    boolean canProcess(String command);
 
-    public boolean requestsConnection() {
-        return !dbManager.isConnected();
-    }
+    void process(String command);
+
+    boolean requestsConnection();
 }

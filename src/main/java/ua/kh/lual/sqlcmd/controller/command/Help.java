@@ -1,6 +1,6 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
-public class Help extends UserCommand {
+public class Help extends UserCommandClass {
 
     UserCommand[] commandList;
 
@@ -19,16 +19,13 @@ public class Help extends UserCommand {
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("help");
-    }
-
-    @Override
     public void process(String command) {
+        String[] parameters = extractParameters(command);
+        if (parameters == null) return;
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
             view.write("\t" + cmd.format());
-            String[] descriptions = cmd.description().split("!NL");
+            String[] descriptions = cmd.description().split("\n");
             for (String description: descriptions) {
                 view.write("\t\t" + description);
             }

@@ -2,7 +2,7 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import java.util.Arrays;
 
-public class List extends UserCommand {
+public class List extends UserCommandClass {
 
     @Override
     public String format() {
@@ -15,12 +15,9 @@ public class List extends UserCommand {
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("list");
-    }
-
-    @Override
     public void process(String command) {
+        String[] parameters = extractParameters(command);
+        if (parameters == null) return;
         String[] tableNames = dbManager.getTableNames();
         String message = Arrays.toString(tableNames);
         view.write(message);

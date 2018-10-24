@@ -2,7 +2,7 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.MyUtils;
 
-public class Find extends UserCommand {
+public class Find extends UserCommandClass {
 
     @Override
     public String format() {
@@ -11,22 +11,14 @@ public class Find extends UserCommand {
 
     @Override
     public String description() {
-        return  "Prints content of selected table" + "!NL" +
-                "if <table_name> is specified, it becomes selected at first";
-    }
-
-    @Override
-    public boolean canProcess(String command) {
-        return command.equals("find") | command.startsWith("find|");
+        return  "Prints content of selected table";
     }
 
     @Override
     public void process(String command) {
-        String[] chunks = command.split("\\|");
-        if (chunks.length > 1) {
-            String tableName = chunks[1];
-            new Select().process("select|" + tableName);
-        }
+        String[] parameters = extractParameters(command);
+        if (parameters == null) return;
+        dbManager.selectTable(parameters[0]);
         String[] columnNames = dbManager.getColumnNames();
         view.write(MyUtils.rowToString(columnNames));
         view.write("---------------------------");

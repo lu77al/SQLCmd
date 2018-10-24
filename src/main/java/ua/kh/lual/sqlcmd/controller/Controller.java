@@ -4,6 +4,8 @@ import ua.kh.lual.sqlcmd.controller.command.*;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
+import java.sql.SQLOutput;
+
 public class Controller {
 
     private DatabaseManager dbManager;
@@ -15,14 +17,13 @@ public class Controller {
         this.dbManager = dbManager;
         this.view = view;
 
-        Help.setDbManager(dbManager);
-        Help.setView(view);
+        UserCommandClass.setDbManager(dbManager);
+        UserCommandClass.setView(view);
 
         Help help = new Help();
         this.commands = new UserCommand[]{
                 new Connect(),
                 new List(),
-                new Select(),
                 new Find(),
                 new Exit(),
                 help
@@ -35,7 +36,9 @@ public class Controller {
         try {
             mainLoop();
         } catch (Exception e) {
-            // Nothing
+            if (e.getMessage() != null) {
+                view.write(e.getMessage());
+            }
         }
     }
 
