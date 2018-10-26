@@ -2,31 +2,29 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
-import ua.kh.lual.sqlcmd.utils.MyUtils;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
-public class Find extends UserCommandClass {
-
+public class Clear extends UserCommandClass {
     @Override
     public String format() {
-        return "find|table_name";
+        return "clear|table_name";
     }
 
     @Override
     public String description() {
-        return  "Prints content of the table <table_name>";
+        return  "Clears table <table_name>";
     }
 
     @Override
-    public void process(String command) {
+    public void process(String command) throws CommandFailedException {
         String[] parameters = extractParameters(command);
         try {
             dbManager.selectTable(parameters[0]);
-            view.write(new TextTable(dbManager.getColumnNames(),
-                    dbManager.getTableData(),
-                    2).toString());
+            dbManager.clearTable();
+            view.write("Table <" + parameters[0] + "> was cleared");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
+
     }
 }

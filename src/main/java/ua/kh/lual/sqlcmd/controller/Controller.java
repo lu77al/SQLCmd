@@ -22,6 +22,7 @@ public class Controller {
                 new Connect(),
                 new Tables(),
                 new Find(),
+                new Clear(),
                 new Exit(),
                 help
         };
