@@ -3,7 +3,7 @@ package ua.kh.lual.sqlcmd.model;
 
 import java.sql.*;
 
-import static ua.kh.lual.sqlcmd.MyUtils.resizeArray;
+import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 
 public class JDBCManager implements DatabaseManager {
 

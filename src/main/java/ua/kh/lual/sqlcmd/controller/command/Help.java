@@ -1,5 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+
 public class Help extends UserCommandClass {
 
     UserCommand[] commandList;
@@ -20,8 +22,7 @@ public class Help extends UserCommandClass {
 
     @Override
     public void process(String command) {
-        String[] parameters = extractParameters(command);
-        if (parameters == null) return;
+        extractParameters(command);
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
             view.write("\t" + cmd.format());

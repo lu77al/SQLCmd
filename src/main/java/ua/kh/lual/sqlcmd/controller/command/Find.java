@@ -1,6 +1,8 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
-import ua.kh.lual.sqlcmd.MyUtils;
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+import ua.kh.lual.sqlcmd.utils.MyUtils;
+import ua.kh.lual.sqlcmd.utils.TextTable;
 
 public class Find extends UserCommandClass {
 
@@ -17,16 +19,9 @@ public class Find extends UserCommandClass {
     @Override
     public void process(String command) {
         String[] parameters = extractParameters(command);
-        if (parameters == null) return;
         dbManager.selectTable(parameters[0]);
-        String[] columnNames = dbManager.getColumnNames();
-//        view.write(MyUtils.rowToString(columnNames));
-//        view.write("---------------------------");
-        Object[][] tableData = dbManager.getTableData();
-//        for (Object[] row: tableData) {
-//            view.write(MyUtils.rowToString(row));
-//        }
-        view.write(MyUtils.tableToString(columnNames, tableData, 2));
-
+        view.write(new TextTable(dbManager.getColumnNames(),
+                                 dbManager.getTableData(),
+                                 2).toString());
     }
 }

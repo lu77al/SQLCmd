@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd;
 
 import org.junit.Test;
+import ua.kh.lual.sqlcmd.utils.MyUtils;
 
 import java.util.Arrays;
 

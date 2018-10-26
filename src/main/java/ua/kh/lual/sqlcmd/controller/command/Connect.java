@@ -1,5 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+
 public class Connect extends UserCommandClass {
     @Override
     public String format() {
@@ -14,7 +16,6 @@ public class Connect extends UserCommandClass {
     @Override
     public void process(String command) {
         String[] parameters = extractParameters(command);
-        if (parameters == null) return;
         try {
             String database = parameters[0];
             String user = parameters[1];
@@ -22,11 +23,11 @@ public class Connect extends UserCommandClass {
             dbManager.connect(database, user, password);
             view.write(String.format("User <%s> successfully connected to database <%s>", user, database));
         } catch (Exception e) {
-            view.write("Connection failed");
-            view.write("Reason: " +e.getMessage());
+            String errorMessage = e.getMessage();
             if (e.getCause() != null) {
-                view.write("\t" + e.getCause().getMessage());
+                errorMessage +=  System.lineSeparator() + "\t" + e.getCause().getMessage();
             }
+            throw new CommandFailedException(errorMessage);
         }
     }
 

@@ -1,5 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+
 import java.util.Arrays;
 
 public class List extends UserCommandClass {
@@ -16,8 +18,7 @@ public class List extends UserCommandClass {
 
     @Override
     public void process(String command) {
-        String[] parameters = extractParameters(command);
-        if (parameters == null) return;
+        extractParameters(command);
         String[] tableNames = dbManager.getTableNames();
         String message = Arrays.toString(tableNames);
         view.write(message);

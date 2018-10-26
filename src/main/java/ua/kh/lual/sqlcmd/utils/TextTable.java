@@ -1,32 +1,20 @@
-package ua.kh.lual.sqlcmd;
+package ua.kh.lual.sqlcmd.utils;
 
-import com.sun.deploy.util.StringUtils;
+public class TextTable {
+    private Object[] header;
+    private Object[][] content;
+    private int margin;
 
-public class MyUtils {
 
-    public static String[] resizeArray(String[] arr, int newLength) {
-        String[] newArr = new String[newLength];
-        System.arraycopy(arr, 0, newArr, 0, Math.min(arr.length,newLength));
-        return newArr;
+    public TextTable(Object[] header, Object[][] content, int margin) {
+        this.header = header;
+        this.content = content;
+        this.margin = margin;
     }
 
-    public static Object[] resizeArray(Object[] arr, int newLength) {
-        Object[] newArr = new Object[newLength];
-        System.arraycopy(arr, 0, newArr, 0, Math.min(arr.length,newLength));
-        return newArr;
-    }
-
-    public static String rowToString(Object[] items) {
-        StringBuilder result = new StringBuilder("| ");
-        for (Object item: items) {
-            result.append(item);
-            result.append(" |\t");
-        }
-        return result.toString();
-    }
-
-    public static String tableToString(String[] header, Object[][] content, int margin) {
-        int[] columnsWidth = getColumnsWidth(header, content, margin);
+    @Override
+    public String toString() {
+        int[] columnsWidth = getColumnsWidth();
         String horizontalLine = getTableHorizontalLine(columnsWidth);
         String lineEnd = System.lineSeparator();
         String result = horizontalLine + lineEnd;
@@ -41,10 +29,10 @@ public class MyUtils {
         return result;
     }
 
-    private static int[] getColumnsWidth(String[] header, Object[][] content, int margin) {
+    private int[] getColumnsWidth() {
         int[] columnWidth = new int[header.length];
         for (int i = 0; i < header.length; i++) {
-            columnWidth[i] = header[i].length();
+            columnWidth[i] = header[i].toString().length();
             for (Object[] rowCells: content) {
                 int width = rowCells[i].toString().length();
                 if (width > columnWidth[i]) {
@@ -56,7 +44,7 @@ public class MyUtils {
         return columnWidth;
     }
 
-    private static String getTableHorizontalLine(int[] columnWidth) {
+    private String getTableHorizontalLine(int[] columnWidth) {
         StringBuilder result = new StringBuilder("+");
         for (int width: columnWidth) {
             for (int i = 0; i < width; i++) {
@@ -67,7 +55,7 @@ public class MyUtils {
         return result.toString();
     }
 
-    private static String getTableRow(Object[] items, int[] columnWidth) {
+    private String getTableRow(Object[] items, int[] columnWidth) {
         StringBuilder result = new StringBuilder("+");
         for (int i = 0; i < items.length; i++) {
             String cell = items[i].toString();

@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd.controller;
 
 import ua.kh.lual.sqlcmd.controller.command.*;
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
@@ -56,15 +57,16 @@ public class Controller {
     private void executeUserCommand(String userInput) {
         for (UserCommand command : commands) {
             if (command.canProcess(userInput)) {
-                if (command.requestsConnection()) {
-                    view.write("Please connect to database before using command " + command);
-                    view.write("\tUse command <" + new Connect().format());
-                } else {
+                try {
                     command.process(userInput);
+                } catch (CommandFailedException e) {
+                    view.write("Command failed");
+                    view.write(e.getMessage());
                 }
                 return;
             }
         }
         view.write("Unknown command: " + userInput);
     }
+
 }

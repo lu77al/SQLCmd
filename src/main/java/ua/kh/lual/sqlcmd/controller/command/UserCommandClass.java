@@ -1,5 +1,6 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
@@ -14,31 +15,36 @@ public abstract class UserCommandClass implements UserCommand{
     @Override
     public abstract String description();
     @Override
-    public abstract void process(String command);
+    public abstract void process(String command) throws CommandFailedException;
 
     @Override
     public boolean canProcess(String command) {
-        int delimiterIndex = format().indexOf('|');
-        if (delimiterIndex == -1) {
-            return format().equals(command);
-        } else {
-            return command.startsWith(format().substring(0,delimiterIndex));
+        String[] estimated = format().split("\\|");
+        String[] entered = command.split("\\|");
+        if (entered.length == 0) {
+            return false;
         }
+        return estimated[0].equals(entered[0]);
     }
 
     protected String[] extractParameters(String command) {
+        if (requestsConnection()) {
+            throw new CommandFailedException("Please connect to database before using command " + command +
+                                             "\n\tUse command <" + new Connect().format());
+        }
         int chunksExpected = format().split("\\|").length;
         String[] result = command.split("\\|");
         if (result.length == chunksExpected) {
             return Arrays.copyOfRange(result,1, result.length);
         } else {
+            String errorMessage;
             if (result.length < chunksExpected) {
-                view.write("Not enough parameters");
+                errorMessage = "Not enough parameters";
             } else {
-                view.write("Too many parameters");
+                errorMessage = "Too many parameters";
             }
-            view.write("Please use format: <" + format() + ">");
-            return null;
+            errorMessage += System.lineSeparator() + "Please use format: <" + format() + ">";
+            throw new CommandFailedException(errorMessage);
         }
     }
 

@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
-import ua.kh.lual.sqlcmd.controller.ExitException;
+import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
 
 public class Exit extends UserCommandClass {
 
@@ -16,8 +17,7 @@ public class Exit extends UserCommandClass {
 
     @Override
     public void process(String command) {
-        String[] parameters = extractParameters(command);
-        if (parameters == null) return;
+        extractParameters(command);
         view.write("Bye");
         view.write("See you later ;)");
         throw new ExitException();
