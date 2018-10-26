@@ -5,8 +5,6 @@ import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
-import java.sql.SQLOutput;
-
 public class Controller {
 
     private DatabaseManager dbManager;
@@ -24,7 +22,7 @@ public class Controller {
         Help help = new Help();
         this.commands = new UserCommand[]{
                 new Connect(),
-                new List(),
+                new Tables(),
                 new Find(),
                 new Exit(),
                 help

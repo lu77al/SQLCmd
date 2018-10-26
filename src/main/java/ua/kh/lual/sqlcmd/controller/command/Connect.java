@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
 public class Connect extends UserCommandClass {
     @Override
@@ -22,12 +23,8 @@ public class Connect extends UserCommandClass {
             String password = parameters[2];
             dbManager.connect(database, user, password);
             view.write(String.format("User <%s> successfully connected to database <%s>", user, database));
-        } catch (Exception e) {
-            String errorMessage = e.getMessage();
-            if (e.getCause() != null) {
-                errorMessage +=  "\n\t" + e.getCause().getMessage();
-            }
-            throw new CommandFailedException(errorMessage);
+        } catch (JDBCManagerException e) {
+            throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
     }
 

@@ -15,16 +15,17 @@ public class JDBCManager implements DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Please add postgresql-42.2.5.jar to project", e);
+            throw new JDBCManagerException("Can't process databases\n" +
+                     "\tPlease add postgresql-42.2.5.jar to project");
         }
         try {
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/" + database, user, password);
         } catch (SQLException e) {
             connection = null;
-            throw new RuntimeException(
-                    String.format("Can't get connection for database:%s user:%s password:%s",
-                    database, user, password ), e);
+            throw new JDBCManagerException(
+                    String.format("Can't get connection for database:<%s> user:<%s> password:<%s>",
+                    database, user, password ));
         }
     }
 
@@ -47,8 +48,7 @@ public class JDBCManager implements DatabaseManager {
             st.close();
             return tables;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new String[0];
+            throw new JDBCManagerException("Can't get tables names");
         }
     }
 
@@ -69,8 +69,7 @@ public class JDBCManager implements DatabaseManager {
             st.close();
             return columnNames;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new String[0];
+            throw new JDBCManagerException(String.format("Can't get table <%s> header", selectedTable));
         }
     }
 
@@ -90,28 +89,39 @@ public class JDBCManager implements DatabaseManager {
             st.close();
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Object[0][0];
+            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
     }
 
     @Override
     public void clearTable() {
-        executeSQL("DELETE FROM " + selectedTable);
+        try {
+            executeSQL("DELETE FROM " + selectedTable);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't clear table <%s>", selectedTable));
+        }
     }
 
     @Override
     public void addRow(DataSet row) {
         String names = prepareList("\"%s\"", row.getNames());
         String values = prepareList("'%s\'", row.getValues());
-        executeSQL("INSERT INTO " + selectedTable +" (" + names + ") VALUES (" + values + ")");
+        try {
+            executeSQL("INSERT INTO " + selectedTable +" (" + names + ") VALUES (" + values + ")");
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't insert data into table <%s>", selectedTable));
+        }
     }
 
     @Override
     public void updateTable(DataSet set, DataSet where) {
         String setList = prepareList("\"%s\" = '%s'", set.getNames(), set.getValues());
         String whereList = prepareList("\"%s\" = '%s'", where.getNames(), where.getValues());
-        executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
+        try {
+            executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't update table <%s>", selectedTable));
+        }
     }
 
     @Override
@@ -129,14 +139,10 @@ public class JDBCManager implements DatabaseManager {
         return size;
     }
 
-    private void executeSQL(String query) {
-        try {
-            Statement st = connection.createStatement();
-            st.executeUpdate(query);
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private void executeSQL(String query) throws SQLException {
+        Statement st = connection.createStatement();
+        st.executeUpdate(query);
+        st.close();
     }
 
     private String prepareList(String item, Object[] values) {
