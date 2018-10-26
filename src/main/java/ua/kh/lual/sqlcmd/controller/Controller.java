@@ -7,13 +7,11 @@ import ua.kh.lual.sqlcmd.view.View;
 
 public class Controller {
 
-    private DatabaseManager dbManager;
     private View view;
 
-    UserCommand[] commands;
+    private UserCommand[] commands;
 
     public Controller(View view, DatabaseManager dbManager) {
-        this.dbManager = dbManager;
         this.view = view;
 
         UserCommandClass.setDbManager(dbManager);

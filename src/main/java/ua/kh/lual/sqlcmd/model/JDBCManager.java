@@ -31,10 +31,10 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public String[] getTableNames() {
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables" +
-                    " WHERE table_schema='public' AND table_type='BASE TABLE'");
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables" +
+                                                " WHERE table_schema='public' AND table_type='BASE TABLE'"))
+        {
             String[] tables = new String[20];
             int index = 0;
             while (rs.next()) {
@@ -44,8 +44,6 @@ public class JDBCManager implements DatabaseManager {
                 tables[index++] = rs.getString("table_name");
             }
             tables = resizeArray(tables, index);
-            rs.close();
-            st.close();
             return tables;
         } catch (SQLException e) {
             throw new JDBCManagerException("Can't get tables names");
@@ -59,14 +57,12 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public String[] getColumnNames() {
-        try {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM " + selectedTable + " WHERE false");
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM " + selectedTable + " WHERE false")) {
             ResultSetMetaData md = st.getMetaData();
             String[] columnNames = new String[md.getColumnCount()];
             for (int i = 0; i < columnNames.length; i++) {
                 columnNames[i] = md.getColumnName(i + 1);
             }
-            st.close();
             return columnNames;
         } catch (SQLException e) {
             throw new JDBCManagerException(String.format("Can't get table <%s> header", selectedTable));
@@ -75,9 +71,9 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public Object[][] getTableData() {
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM " + selectedTable);
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM " + selectedTable))
+        {
             Object[][] data = new Object[getTableSize()][rs.getMetaData().getColumnCount()];
             for (int rowIndex = 0; rowIndex < data.length; rowIndex++) {
                 if (!rs.next()) throw new SQLException();
@@ -85,8 +81,6 @@ public class JDBCManager implements DatabaseManager {
                     data[rowIndex][colIndex - 1] = rs.getObject(colIndex);
                 }
             }
-            rs.close();
-            st.close();
             return data;
         } catch (SQLException e) {
             throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
@@ -130,19 +124,19 @@ public class JDBCManager implements DatabaseManager {
     }
 
     private int getTableSize() throws SQLException {
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable);
-        rs.next();
-        int size = rs.getInt(1);
-        rs.close();
-        st.close();
-        return size;
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable))
+        {
+            rs.next();
+            int size = rs.getInt(1);
+            return size;
+        }
     }
 
     private void executeSQL(String query) throws SQLException {
-        Statement st = connection.createStatement();
-        st.executeUpdate(query);
-        st.close();
+        try (Statement st = connection.createStatement()) {
+            st.executeUpdate(query);
+        }
     }
 
     private String prepareList(String item, Object[] values) {
