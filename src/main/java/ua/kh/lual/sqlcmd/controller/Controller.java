@@ -25,6 +25,7 @@ public class Controller {
                 new Find(),
                 new Clear(),
                 new Insert(),
+                new Update(),
                 new Exit(),
                 help
         };

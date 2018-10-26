@@ -15,11 +15,11 @@ public class Insert extends UserCommandClass {
     public String description() {
         return "Inserts one new row in the table <tableName>\n" +
                 "\t<column1> - name of first column to insert\n" +
-                "\t<column1> - value to insert into first column\n" +
+                "\t<value1>  - value to insert into first column\n" +
                 "\t<column2> - name of second column to insert\n" +
-                "\t<column2> - value to insert into second column\n" +
+                "\t<value2>  - value to insert into second column\n" +
                 "\t<columnN> - name of N's column to insert\n" +
-                "\t<columnN> - value to insert into N's column\n";
+                "\t<valueN>  - value to insert into N's column\n";
     }
 
     @Override
