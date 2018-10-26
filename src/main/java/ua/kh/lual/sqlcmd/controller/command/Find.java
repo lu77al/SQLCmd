@@ -2,19 +2,18 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
-import ua.kh.lual.sqlcmd.utils.MyUtils;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
 public class Find extends UserCommandClass {
 
     @Override
     public String format() {
-        return "find|table_name";
+        return "find|tableName";
     }
 
     @Override
     public String description() {
-        return  "Prints content of the table <table_name>";
+        return  "Prints content of the table <tableName>";
     }
 
     @Override
@@ -22,8 +21,8 @@ public class Find extends UserCommandClass {
         String[] parameters = extractParameters(command);
         try {
             dbManager.selectTable(parameters[0]);
-            view.write(new TextTable(dbManager.getColumnNames(),
-                    dbManager.getTableData(),
+            view.write(new TextTable(dbManager.getTableHeader(),
+                    dbManager.getTableContent(),
                     2).toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

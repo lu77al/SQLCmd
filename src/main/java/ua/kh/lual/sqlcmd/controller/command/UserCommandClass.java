@@ -32,20 +32,22 @@ public abstract class UserCommandClass implements UserCommand{
             throw new CommandFailedException("Please connect to database before using command " + command +
                                              "\n\tUse command <" + new Connect().format());
         }
-        int chunksExpected = format().split("\\|").length;
         String[] result = command.split("\\|");
-        if (result.length == chunksExpected) {
-            return Arrays.copyOfRange(result,1, result.length);
+        checkParametersCount(result.length - 1);
+        return Arrays.copyOfRange(result, 1, result.length);
+    }
+
+    protected void checkParametersCount(int actualCount) {
+        int expectedCount = format().split("\\|").length - 1;
+        if (expectedCount == actualCount) return;
+        String errorMessage;
+        if (actualCount < expectedCount) {
+            errorMessage = "Not enough";
         } else {
-            String errorMessage;
-            if (result.length < chunksExpected) {
-                errorMessage = "Not enough parameters";
-            } else {
-                errorMessage = "Too many parameters";
-            }
-            errorMessage += "\nPlease use format: <" + format() + ">";
-            throw new CommandFailedException(errorMessage);
+            errorMessage = "Too many";
         }
+        errorMessage += " parameters\nPlease use format: <" + format() + ">";
+        throw new CommandFailedException(errorMessage);
     }
 
     @Override

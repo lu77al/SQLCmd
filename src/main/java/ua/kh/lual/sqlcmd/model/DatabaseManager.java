@@ -8,15 +8,15 @@ public interface DatabaseManager {
 
     void selectTable(String tableName);
 
-    String[] getColumnNames();
+    String[] getTableHeader();
 
-    Object[][] getTableData();
+    Object[][] getTableContent();
 
-    void clearTable();
+    void dropTable();
 
-    void addRow(DataSet record);
+    void insert(DataSet record);
 
-    void updateTable(DataSet update, DataSet where);
+    void update(DataSet update, DataSet where);
 
     boolean isConnected();
 }

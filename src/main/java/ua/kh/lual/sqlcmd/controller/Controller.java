@@ -2,6 +2,7 @@ package ua.kh.lual.sqlcmd.controller;
 
 import ua.kh.lual.sqlcmd.controller.command.*;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
+import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
@@ -23,6 +24,7 @@ public class Controller {
                 new Tables(),
                 new Find(),
                 new Clear(),
+                new Insert(),
                 new Exit(),
                 help
         };
@@ -33,10 +35,8 @@ public class Controller {
         view.write("Hello. Your are using SQLcmd application");
         try {
             mainLoop();
-        } catch (Exception e) {
-            if (e.getMessage() != null) {
-                view.write(e.getMessage());
-            }
+        } catch (ExitException e) {
+            // Do nothing
         }
     }
 

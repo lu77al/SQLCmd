@@ -56,7 +56,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getColumnNames() {
+    public String[] getTableHeader() {
         try (PreparedStatement st = connection.prepareStatement("SELECT * FROM " + selectedTable + " WHERE false")) {
             ResultSetMetaData md = st.getMetaData();
             String[] columnNames = new String[md.getColumnCount()];
@@ -70,7 +70,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getTableData() {
+    public Object[][] getTableContent() {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery("SELECT * FROM " + selectedTable))
         {
@@ -88,7 +88,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void clearTable() {
+    public void dropTable() {
         try {
             executeSQL("DELETE FROM " + selectedTable);
         } catch (SQLException e) {
@@ -97,7 +97,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void addRow(DataSet row) {
+    public void insert(DataSet row) {
         String names = prepareList("\"%s\"", row.getNames());
         String values = prepareList("'%s\'", row.getValues());
         try {
@@ -108,7 +108,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void updateTable(DataSet set, DataSet where) {
+    public void update(DataSet set, DataSet where) {
         String setList = prepareList("\"%s\" = '%s'", set.getNames(), set.getValues());
         String whereList = prepareList("\"%s\" = '%s'", where.getNames(), where.getValues());
         try {

@@ -28,12 +28,19 @@ public class TextTable {
         return result;
     }
 
+    static final String nullString = "[null]";
+
     private int[] getColumnsWidth() {
         int[] columnWidth = new int[header.length];
         for (int i = 0; i < header.length; i++) {
             columnWidth[i] = header[i].toString().length();
             for (Object[] rowCells: content) {
-                int width = rowCells[i].toString().length();
+                int width;
+                if (rowCells[i] != null) {
+                    width = rowCells[i].toString().length();
+                } else {
+                    width = nullString.length();
+                }
                 if (width > columnWidth[i]) {
                     columnWidth[i] = width;
                 }
@@ -57,7 +64,7 @@ public class TextTable {
     private String getTableRow(Object[] items, int[] columnWidth) {
         StringBuilder result = new StringBuilder("+");
         for (int i = 0; i < items.length; i++) {
-            String cell = items[i].toString();
+            String cell = (items[i] != null) ? items[i].toString() : nullString;
             int frontMargin = (columnWidth[i] - cell.length()) / 2;
             for (int j = 0; j < frontMargin; j++) {
                 result.append(' ');

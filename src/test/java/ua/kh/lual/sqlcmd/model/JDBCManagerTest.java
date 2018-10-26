@@ -2,9 +2,6 @@ package ua.kh.lual.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import ua.kh.lual.sqlcmd.model.DataSet;
-import ua.kh.lual.sqlcmd.model.DatabaseManager;
-import ua.kh.lual.sqlcmd.model.JDBCManager;
 
 import java.util.Arrays;
 
@@ -36,22 +33,22 @@ public class JDBCManagerTest {
 
     @Test
     public void testGetColumnNames() {
-        assertEquals("[id, name, password]", Arrays.toString(dbManager.getColumnNames()));
+        assertEquals("[id, name, password]", Arrays.toString(dbManager.getTableHeader()));
     }
 
     @Test
     public void testAddGetTableData() {
-        dbManager.clearTable();
+        dbManager.dropTable();
         DataSet record = new DataSet();
         record.put("id", 1);
         record.put("name", "Vasya");
         record.put("password", "PAROL");
-        dbManager.addRow(record);
+        dbManager.insert(record);
         record.put("id", 2);
         record.put("name", "Manya");
         record.put("password", "parol");
-        dbManager.addRow(record);
-        assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getTableData()));
+        dbManager.insert(record);
+        assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getTableContent()));
     }
 
     @Test
@@ -61,8 +58,8 @@ public class JDBCManagerTest {
         updateRecord.put("password", "baraban");
         DataSet whereRecord = new DataSet();
         whereRecord.put("name", "Vasya");
-        dbManager.updateTable(updateRecord, whereRecord);
-        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getTableData()));
+        dbManager.update(updateRecord, whereRecord);
+        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getTableContent()));
     }
 
     @Test
