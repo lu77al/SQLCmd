@@ -17,7 +17,8 @@ public class Console implements View {
     public void write(String message) {
         String toPrint = normal +
                          message.replaceAll("<", bold).
-                                 replaceAll(">", normal);
+                                 replaceAll(">", normal).
+                                 replaceAll("\n", System.lineSeparator());
         System.out.println(toPrint);
     }
 

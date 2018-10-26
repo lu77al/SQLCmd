@@ -16,13 +16,12 @@ public class TextTable {
     public String toString() {
         int[] columnsWidth = getColumnsWidth();
         String horizontalLine = getTableHorizontalLine(columnsWidth);
-        String lineEnd = System.lineSeparator();
-        String result = horizontalLine + lineEnd;
-        result += getTableRow(header, columnsWidth) + lineEnd;
+        String result = horizontalLine + '\n';
+        result += getTableRow(header, columnsWidth) + '\n';
         if (content.length != 0) {
-            result += horizontalLine + lineEnd;
+            result += horizontalLine + '\n';
             for (Object[] row : content) {
-                result += getTableRow(row, columnsWidth) + lineEnd;
+                result += getTableRow(row, columnsWidth) + '\n';
             }
         }
         result += horizontalLine;

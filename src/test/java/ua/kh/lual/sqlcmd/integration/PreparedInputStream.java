@@ -20,14 +20,14 @@ public class PreparedInputStream extends InputStream {
         if (result == -1) {
             System.out.println(appOutput.toString());
             appOutput.setLength(0);
-        } else if (result != '\n' & result != '\r') {
+        } else if (result != '\n') {
             appOutput.append((char)result);
         }
         return result;
     }
 
     public void userTypes(String line) {
-        userInput += line + System.lineSeparator() + "\uffff";
+        userInput += line + "\n\uffff";
     }
 
     public void clear() {

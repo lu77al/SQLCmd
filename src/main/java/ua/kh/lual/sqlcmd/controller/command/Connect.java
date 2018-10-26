@@ -25,7 +25,7 @@ public class Connect extends UserCommandClass {
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (e.getCause() != null) {
-                errorMessage +=  System.lineSeparator() + "\t" + e.getCause().getMessage();
+                errorMessage +=  "\n\t" + e.getCause().getMessage();
             }
             throw new CommandFailedException(errorMessage);
         }

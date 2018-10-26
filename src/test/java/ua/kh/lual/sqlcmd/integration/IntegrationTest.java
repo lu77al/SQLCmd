@@ -95,7 +95,7 @@ public class IntegrationTest {
 
     private void performTest() {
         Main.main(new String[0]);
-        String actual = getLog().replaceAll("\r\n", "\n").replaceAll("\r", "\n");
+        String actual = getLog().replaceAll(System.lineSeparator(), "\n");
         assertEquals(expected, actual);
     }
 

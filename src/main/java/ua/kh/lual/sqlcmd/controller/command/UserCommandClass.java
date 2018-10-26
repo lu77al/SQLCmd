@@ -43,7 +43,7 @@ public abstract class UserCommandClass implements UserCommand{
             } else {
                 errorMessage = "Too many parameters";
             }
-            errorMessage += System.lineSeparator() + "Please use format: <" + format() + ">";
+            errorMessage += "\nPlease use format: <" + format() + ">";
             throw new CommandFailedException(errorMessage);
         }
     }
