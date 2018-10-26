@@ -2,6 +2,7 @@ package ua.kh.lual.sqlcmd.model;
 
 
 import java.sql.*;
+import java.util.Arrays;
 
 import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 
@@ -70,21 +71,8 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getTableContent() {
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM " + selectedTable))
-        {
-            Object[][] data = new Object[getTableSize()][rs.getMetaData().getColumnCount()];
-            for (int rowIndex = 0; rowIndex < data.length; rowIndex++) {
-                if (!rs.next()) throw new SQLException();
-                for (int colIndex = 1; colIndex <= data[0].length ; colIndex++) {
-                    data[rowIndex][colIndex - 1] = rs.getObject(colIndex);
-                }
-            }
-            return data;
-        } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
-        }
+    public Object[][] getAllContent() {
+        return getTableContent("SELECT * FROM " + selectedTable);
     }
 
     @Override
@@ -109,12 +97,39 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public void update(DataSet set, DataSet where) {
-        String setList = prepareList("\"%s\" = '%s'", set.getNames(), set.getValues());
-        String whereList = prepareList("\"%s\" = '%s'", where.getNames(), where.getValues());
+        String setList = prepareList("\"%s\" = '%s'", ", ", set.getNames(), set.getValues());
+        String whereList = prepareList("\"%s\" = '%s'", ", ", where.getNames(), where.getValues());
         try {
             executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
         } catch (SQLException e) {
             throw new JDBCManagerException(String.format("Can't update table <%s>", selectedTable));
+        }
+    }
+
+    @Override
+    public Object[][] getFilteredContent(DataSet key) {
+        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
+        String sql = "SELECT * FROM " + selectedTable + " WHERE " + whereList;
+        return getTableContent(sql);
+    }
+
+    private Object[][] getTableContent(String sql) {
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql))
+        {
+            int tableWidth = rs.getMetaData().getColumnCount();
+            Object[][] data = new Object[1000][];
+            int tableHeight = 0;
+            while (rs.next()) {
+                data[tableHeight] = new Object[tableWidth];
+                for (int colIndex = 1; colIndex <= tableWidth ; colIndex++) {
+                    data[tableHeight][colIndex - 1] = rs.getObject(colIndex);
+                }
+                tableHeight++;
+            }
+            return Arrays.copyOfRange(data, 0, tableHeight);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
     }
 
@@ -148,13 +163,15 @@ public class JDBCManager implements DatabaseManager {
         return list.substring(0, list.length() - 2);
     }
 
-    private String prepareList(String item, Object[] values1, Object[] values2) {
+    private String prepareList(String item, String delimiter, Object[] values1, Object[] values2) {
         StringBuilder list = new StringBuilder();
         for (int i = 0; i < values1.length; i++) {
             list.append(String.format(item, values1[i].toString(), values2[i].toString()));
-            list.append(", ");
+            if (i < values1.length -1) {
+                list.append(delimiter);
+            }
         }
-        return list.substring(0, list.length() - 2);
+        return list.toString();
     }
 }
 

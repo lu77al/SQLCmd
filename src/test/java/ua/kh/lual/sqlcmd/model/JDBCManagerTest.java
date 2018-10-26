@@ -48,7 +48,7 @@ public class JDBCManagerTest {
         record.put("name", "Manya");
         record.put("password", "parol");
         dbManager.insert(record);
-        assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getTableContent()));
+        assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getAllContent()));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class JDBCManagerTest {
         DataSet whereRecord = new DataSet();
         whereRecord.put("name", "Vasya");
         dbManager.update(updateRecord, whereRecord);
-        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getTableContent()));
+        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getAllContent()));
     }
 
     @Test

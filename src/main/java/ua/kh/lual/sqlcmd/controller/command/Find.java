@@ -22,7 +22,7 @@ public class Find extends UserCommandClass {
         try {
             dbManager.selectTable(parameters[0]);
             view.write(new TextTable(dbManager.getTableHeader(),
-                    dbManager.getTableContent(),
+                    dbManager.getAllContent(),
                     2).toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

@@ -10,7 +10,9 @@ public interface DatabaseManager {
 
     String[] getTableHeader();
 
-    Object[][] getTableContent();
+    Object[][] getAllContent();
+
+    Object[][] getFilteredContent(DataSet key);
 
     void dropTable();
 
