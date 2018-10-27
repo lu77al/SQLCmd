@@ -27,6 +27,7 @@ public class Controller {
                 new Insert(),
                 new Update(),
                 new Exit(),
+                new Test(),
                 help
         };
         help.setCommandList(commands);

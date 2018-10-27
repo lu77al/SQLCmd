@@ -118,9 +118,12 @@ public class JDBCManager implements DatabaseManager {
              ResultSet rs = st.executeQuery(sql))
         {
             int tableWidth = rs.getMetaData().getColumnCount();
-            Object[][] data = new Object[1000][];
+            Object[][] data = new Object[100][];
             int tableHeight = 0;
             while (rs.next()) {
+                if (tableHeight >= data.length) {
+                    data = resizeArray(data, tableHeight + 100);
+                }
                 data[tableHeight] = new Object[tableWidth];
                 for (int colIndex = 1; colIndex <= tableWidth ; colIndex++) {
                     data[tableHeight][colIndex - 1] = rs.getObject(colIndex);
@@ -138,13 +141,15 @@ public class JDBCManager implements DatabaseManager {
         return connection != null;
     }
 
-    private int getTableSize() throws SQLException {
+    private int getTableSize() {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable))
         {
             rs.next();
             int size = rs.getInt(1);
             return size;
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't get table <%s> size", selectedTable));
         }
     }
 
