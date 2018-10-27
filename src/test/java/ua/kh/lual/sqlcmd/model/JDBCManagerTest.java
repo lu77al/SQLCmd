@@ -7,16 +7,42 @@ import java.util.Arrays;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class JDBCManagerTest {
 
     private static final String database =  "sqlcmd";
     private static final String user =      "postgres";
     private static final String password =  "12345";
-    private static final String table =     "users";
+    private static final String table =     "modeltesttable";
 
     private DatabaseManager dbManager;
 
+    private void createTable() {
+        try {
+            dbManager.createTable(table, new String[]{"name", "password"});
+        } catch (Exception e) {
+            // Just catch
+        }
+    }
+
+    private void dropTable() {
+        try {
+            dbManager.dropTable(table);
+        } catch (Exception e) {
+            // Just catch
+        }
+    }
+
+    private void fillTable() throws Exception {
+        DataSet row = new DataSet();
+        row.put("name", "Vasiliy");
+        row.put("password", "parol");
+        dbManager.insert(table, row);
+        row.put("name", "Marina");
+        row.put("password", "hook");
+        dbManager.insert(table, row);
+    }
 
     @Before
     public void setup() {
@@ -25,54 +51,137 @@ public class JDBCManagerTest {
     }
 
     @Test
-    public void testGetTableNames() {
-        String[] tableNames = dbManager.getTableNames();
-        assertEquals("[users, pets]", Arrays.toString(tableNames));
-    }
-
-    @Test
-    public void testGetColumnNames() {
-        assertEquals("[id, name, password]", Arrays.toString(dbManager.getTableHeader(table    )));
-    }
-
-    @Test
-    public void testAddGetTableData() {
-        dbManager.clearTable(table);
-        DataSet record = new DataSet();
-        record.put("id", 1);
-        record.put("name", "Vasya");
-        record.put("password", "PAROL");
-        dbManager.insert(table, record);
-        record.put("id", 2);
-        record.put("name", "Manya");
-        record.put("password", "parol");
-        dbManager.insert(table, record);
-        assertEquals("[[1, Vasya, PAROL], [2, Manya, parol]]", Arrays.deepToString(dbManager.getAllContent(table)));
-    }
-
-    @Test
-    public void testUpdateTable() {
-        testAddGetTableData();
-        DataSet updateRecord = new DataSet();
-        updateRecord.put("password", "baraban");
-        DataSet whereRecord = new DataSet();
-        whereRecord.put("name", "Vasya");
-        dbManager.update(table, updateRecord, whereRecord);
-        assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getAllContent(table)));
-    }
-
-    @Test
-    public void createDropTable() {
-        testAddGetTableData();
-        dbManager.createTable("testcreate", new String[]{"iD", "Model", "Price"});
-        assertEquals("[iD, Model, Price]", Arrays.deepToString(dbManager.getTableHeader("testcreate")));
-        dbManager.dropTable("testcreate");
-        assertEquals(-1, Arrays.toString(dbManager.getTableNames()).indexOf("testcreate"));
-    }
-
-    @Test
-    public void testIsConnected() {
+    public void testConnect() {
         assertTrue(dbManager.isConnected());
     }
 
+    @Test
+    public void testCreateTable() {
+        boolean failed = false;
+        try {
+            dbManager.createTable(table, new String[]{"name", "password"});
+        } catch (Exception e) {
+            failed = true;
+        }
+        dropTable();
+        assertFalse(failed);
+    }
+
+
+    @Test
+    public void testDropTable() {
+        createTable();
+        boolean failed = false;
+        try {
+            dbManager.dropTable(table);
+        } catch (Exception e) {
+            failed = true;
+        }
+        assertFalse(failed);
+    }
+
+    @Test
+    public void testGetTableNames() {
+        createTable();
+        String tables = Arrays.toString(dbManager.getTableNames());
+        dropTable();
+        assertTrue(tables.indexOf(table) != -1);
+    }
+
+    @Test
+    public void testGetTableHeader() {
+        createTable();
+        String header = Arrays.toString(dbManager.getTableHeader(table));
+        dropTable();
+        assertEquals("[name, password]", header);
+    }
+
+    @Test
+    public void testInsert() {
+        createTable();
+        boolean failed = false;
+        try {
+            fillTable();
+        } catch (Exception e) {
+            failed = true;
+        }
+        dropTable();
+        assertFalse(failed);
+    }
+
+    @Test
+    public void testGetAllContent() {
+        createTable();
+        try {
+            fillTable();
+        } catch (Exception e) {
+            // Just catch
+        }
+        Object[][] content = dbManager.getAllContent(table);
+        dropTable();
+        assertEquals("[[Vasiliy, parol], [Marina, hook]]", Arrays.deepToString(content));
+    }
+
+    @Test
+    public void testGetFilteredContent() {
+        createTable();
+        try {
+            fillTable();
+        } catch (Exception e) {
+            // Just catch
+        }
+        DataSet key = new DataSet();
+        key.put("name", "Vasiliy");
+        Object[][] content = dbManager.getFilteredContent(table, key);
+        dropTable();
+        assertEquals("[[Vasiliy, parol]]", Arrays.deepToString(content));
+    }
+
+    @Test
+    public void testClearTable() {
+        createTable();
+        try {
+            fillTable();
+            dbManager.clearTable(table);
+        } catch (Exception e) {
+            // Just catch
+        }
+        Object[][] content = dbManager.getAllContent(table);
+        dropTable();
+        assertEquals("[]", Arrays.deepToString(content));
+    }
+
+    @Test
+    public void testDelete() {
+        createTable();
+        try {
+            fillTable();
+        } catch (Exception e) {
+            // Just catch
+        }
+        DataSet key = new DataSet();
+        key.put("name", "Vasiliy");
+        dbManager.delete(table, key);
+        Object[][] content = dbManager.getAllContent(table);
+        dropTable();
+        assertEquals("[[Marina, hook]]", Arrays.deepToString(content));
+    }
+
+    @Test
+    public void testUpdate() {
+        createTable();
+        try {
+            fillTable();
+        } catch (Exception e) {
+            // Just catch
+        }
+        DataSet key = new DataSet();
+        key.put("name", "Vasiliy");
+        DataSet update = new DataSet();
+        update.put("password", "ChertPoberi");
+        dbManager.update(table, update, key);
+        Object[][] content = dbManager.getAllContent(table);
+        dropTable();
+        assertEquals("[[Marina, hook], [Vasiliy, ChertPoberi]]", Arrays.deepToString(content));
+    }
 }

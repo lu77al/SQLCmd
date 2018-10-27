@@ -17,6 +17,13 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public void connect(String database, String user, String password) {
+        if (isConnected()) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+            }
+            connection = null;
+        }
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {

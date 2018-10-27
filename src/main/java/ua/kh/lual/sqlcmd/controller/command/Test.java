@@ -73,6 +73,4 @@ public class Test extends UserCommandClass {
     public boolean requestsConnection() {
         return false;
     }
-
-
 }
