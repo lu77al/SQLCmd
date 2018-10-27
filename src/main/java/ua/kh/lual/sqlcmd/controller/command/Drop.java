@@ -3,25 +3,27 @@ package ua.kh.lual.sqlcmd.controller.command;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
-public class Clear extends UserCommandClass {
+public class Drop extends UserCommandClass{
+
     @Override
     public String format() {
-        return "clear|tableName";
+        return "drop|tableName";
     }
 
     @Override
     public String description() {
-        return  "Clears table <tableName>";
+        return "Deletes table <tableName> from database";
     }
 
     @Override
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            dbManager.clearTable(table);
-            view.write("Table <" + table + "> was cleared");
+            dbManager.dropTable(table);
+            view.write("Table <" + table + "> was deleted");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
+
     }
 }

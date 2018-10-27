@@ -28,6 +28,7 @@ public class Controller {
                 new Update(),
                 new Delete(),
                 new Create(),
+                new Drop(),
                 new Exit(),
                 new Test(),
                 help
