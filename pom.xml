@@ -32,6 +32,12 @@
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
         </dependency>
+        <!-- https://search.maven.org/artifact/org.mockito/mockito-core/2.23.0/jar -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.23.0</version>
+        </dependency>
     </dependencies>
 
 
