@@ -24,8 +24,12 @@ public class Test extends UserCommandClass {
         } else {
             view.write("Test to execute:  <" + testId + ">");
         }
-        if (testId == "startupDefaultTest") {
+        if (testId.equals("startupDefaultTest")) {
             startupDefaultTest();
+            return;
+        }
+        if (testId.equals("1")) {
+            test_1();
             return;
         }
         view.write("Such test hasn't prepared");
@@ -33,6 +37,23 @@ public class Test extends UserCommandClass {
 
     private void startupDefaultTest() {
         executeCMD(new Connect(), "connect|sqlcmd|postgres|12345");
+    }
+
+    private void test_1() {
+        executeCMD(new Connect(), "connect|sqlcmd|postgres|12345");
+        executeCMD(new Tables(), "tables");
+        executeCMD(new Create(), "create|tasks|id|description|deadline");
+        executeCMD(new Find(), "find|tasks");
+        executeCMD(new Insert(), "insert|tasks|id|1|description|view lecture|deadline|10.10.2018");
+        executeCMD(new Insert(), "insert|tasks|id|2|description|finish SQLcmd|deadline|25.12.2018");
+        executeCMD(new Insert(), "insert|tasks|id|3|description|get java job|deadline|15.03.2019");
+        executeCMD(new Insert(), "insert|tasks|id|4|description|buy a new car|deadline|2.08.2019");
+        executeCMD(new Find(), "find|tasks");
+        executeCMD(new Update(), "update|tasks|deadline|20.12.2018|description|finish SQLcmd");
+        executeCMD(new Delete(), "delete|tasks|description|buy a new car");
+        executeCMD(new Find(), "find|tasks");
+        executeCMD(new Drop(), "drop|tasks");
+        executeCMD(new Tables(), "tables");
     }
 
     private void executeCMD(UserCommand cmd, String userInput) {
