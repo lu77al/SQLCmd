@@ -19,16 +19,16 @@ public class Delete extends UserCommandClass{
     @Override
     protected void execute(String[] parameters) {
         try {
-            dbManager.selectTable(parameters[0]);
+            String table = parameters[0];
             DataSet whereRecord = new DataSet();
             whereRecord.put(parameters[1], parameters[2]);
-            Object[][] updatePreviousState = dbManager.getFilteredContent(whereRecord);
+            Object[][] updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.length == 0) {
                 view.write("Nothing matches key field. No delete performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(), updatePreviousState, 2).toString());
-            dbManager.delete(whereRecord);
+            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
+            dbManager.delete(table, whereRecord);
             view.write("Rows above where deleted");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

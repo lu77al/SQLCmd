@@ -26,18 +26,18 @@ public class Update extends UserCommandClass {
     @Override
     protected void execute(String[] parameters) {
         try {
-            dbManager.selectTable(parameters[0]);
+            String table = parameters[0];
             DataSet whereRecord = new DataSet();
             whereRecord.put(parameters[3], parameters[4]);
-            Object[][] updatePreviousState = dbManager.getFilteredContent(whereRecord);
+            Object[][] updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.length == 0) {
                 view.write("Nothing matches key field. No update performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(), updatePreviousState, 2).toString());
+            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
             DataSet updateRecord = new DataSet();
             updateRecord.put(parameters[1], parameters[2]);
-            dbManager.update(updateRecord, whereRecord);
+            dbManager.update(table, updateRecord, whereRecord);
             view.write("Rows above where updated");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

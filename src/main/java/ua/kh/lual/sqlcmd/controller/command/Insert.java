@@ -25,12 +25,12 @@ public class Insert extends UserCommandClass {
     @Override
     protected void execute(String[] parameters) {
         try {
-            dbManager.selectTable(parameters[0]);
+            String table = parameters[0];
             DataSet insert = new DataSet();
             for (int i = 1; i < parameters.length; i += 2) {
                 insert.put(parameters[i], parameters[i + 1]);
             }
-            dbManager.insert(insert);
+            dbManager.insert(table, insert);
             view.write("New data added successfully");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

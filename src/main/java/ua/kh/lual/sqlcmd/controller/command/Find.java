@@ -19,9 +19,9 @@ public class Find extends UserCommandClass {
     @Override
     protected void execute(String[] parameters) {
         try {
-            dbManager.selectTable(parameters[0]);
-            view.write(new TextTable(dbManager.getTableHeader(),
-                    dbManager.getAllContent(),
+            String table = parameters[0];
+            view.write(new TextTable(dbManager.getTableHeader(table),
+                    dbManager.getAllContent(table),
                     2).toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());

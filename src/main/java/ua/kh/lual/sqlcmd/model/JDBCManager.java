@@ -9,7 +9,6 @@ import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 public class JDBCManager implements DatabaseManager {
 
     private Connection connection;
-    private String selectedTable;
 
     @Override
     public boolean isConnected() {
@@ -57,12 +56,8 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void selectTable(String tableName) {
-        selectedTable = "\"" + tableName.toLowerCase() + "\"";
-    }
-
-    @Override
-    public String[] getTableHeader() {
+    public String[] getTableHeader(String tableName) {
+        String selectedTable = normalizeTableName(tableName);
         try (PreparedStatement st = connection.prepareStatement("SELECT * FROM " + selectedTable + " WHERE false")) {
             ResultSetMetaData md = st.getMetaData();
             String[] columnNames = new String[md.getColumnCount()];
@@ -76,12 +71,18 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getAllContent() {
-        return getTableContent("SELECT * FROM " + selectedTable);
+    public Object[][] getAllContent(String tableName) {
+        String selectedTable = normalizeTableName(tableName);
+        try {
+            return getTableContent("SELECT * FROM " + selectedTable);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
+        }
     }
 
     @Override
-    public void clearTable() {
+    public void clearTable(String tableName) {
+        String selectedTable = normalizeTableName(tableName);
         try {
             executeSQL("DELETE FROM " + selectedTable);
         } catch (SQLException e) {
@@ -90,7 +91,8 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void insert(DataSet row) {
+    public void insert(String tableName, DataSet row) {
+        String selectedTable = normalizeTableName(tableName);
         String names = prepareList("\"%s\"", row.getNames());
         String values = prepareList("'%s\'", row.getValues());
         try {
@@ -101,7 +103,8 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void update(DataSet set, DataSet where) {
+    public void update(String tableName, DataSet set, DataSet where) {
+        String selectedTable = normalizeTableName(tableName);
         String setList = prepareList("\"%s\" = '%s'", ", ", set.getNames(), set.getValues());
         String whereList = prepareList("\"%s\" = '%s'", ", ", where.getNames(), where.getValues());
         try {
@@ -112,14 +115,20 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getFilteredContent(DataSet key) {
+    public Object[][] getFilteredContent(String tableName, DataSet key) {
+        String selectedTable = normalizeTableName(tableName);
         String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
         String sql = "SELECT * FROM " + selectedTable + " WHERE " + whereList;
-        return getTableContent(sql);
+        try {
+            return getTableContent(sql);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
+        }
     }
 
     @Override
-    public void delete(DataSet key) {
+    public void delete(String tableName, DataSet key) {
+        String selectedTable = normalizeTableName(tableName);
         String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
         try {
             executeSQL("DELETE FROM " + selectedTable + " WHERE " + whereList);
@@ -130,7 +139,8 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public void createTable(String tableName, String[] columns) {
-        String sql = "CREATE TABLE " + tableName + " (" +
+        String selectedTable = normalizeTableName(tableName);
+        String sql = "CREATE TABLE " + selectedTable + " (" +
                      prepareList("\"%s\" text", columns) + ")";
         try {
             executeSQL(sql);
@@ -141,14 +151,19 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public void dropTable(String tableName) {
+        String selectedTable = normalizeTableName(tableName);
         try {
-            executeSQL("DROP TABLE " + tableName);
+            executeSQL("DROP TABLE " + selectedTable);
         } catch (SQLException e) {
             throw new JDBCManagerException(String.format("Can't drop table <%s>", selectedTable));
         }
     }
 
-    private Object[][] getTableContent(String sql) {
+    private String normalizeTableName(String tableName) {
+        return  "\"" + tableName.toLowerCase() + "\"";
+    }
+
+    private Object[][] getTableContent(String sql) throws SQLException {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql))
         {
@@ -166,20 +181,18 @@ public class JDBCManager implements DatabaseManager {
                 tableHeight++;
             }
             return Arrays.copyOfRange(data, 0, tableHeight);
-        } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
     }
 
-    private int getTableSize() {
+    private int getTableSize(String tableName) {
         try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + selectedTable))
+             ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + tableName))
         {
             rs.next();
             int size = rs.getInt(1);
             return size;
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> size", selectedTable));
+            throw new JDBCManagerException(String.format("Can't get table <%s> size", tableName));
         }
     }
 

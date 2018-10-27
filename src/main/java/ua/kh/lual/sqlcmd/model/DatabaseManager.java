@@ -2,29 +2,28 @@ package ua.kh.lual.sqlcmd.model;
 
 public interface DatabaseManager {
 
+    boolean isConnected();
+
     String[] getTableNames();
 
     void connect(String database, String user, String password);
 
-    void selectTable(String tableName);
+    String[] getTableHeader(String tableName);
 
-    String[] getTableHeader();
+    Object[][] getAllContent(String tableName);
 
-    Object[][] getAllContent();
+    Object[][] getFilteredContent(String tableName, DataSet key);
 
-    Object[][] getFilteredContent(DataSet key);
+    void clearTable(String tableName);
 
-    void clearTable();
+    void insert(String tableName, DataSet record);
 
-    void insert(DataSet record);
+    void update(String tableName, DataSet update, DataSet where);
 
-    void update(DataSet update, DataSet where);
-
-    void delete(DataSet key);
+    void delete(String tableName, DataSet key);
 
     void createTable(String tableName, String[] columns);
 
     void dropTable(String tableName);
 
-    boolean isConnected();
 }
