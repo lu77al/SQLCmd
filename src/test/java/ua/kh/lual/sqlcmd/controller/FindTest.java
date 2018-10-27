@@ -26,13 +26,12 @@ public class FindTest {
     }
 
     @Test
-    public void test() {
+    public void process() {
         // given
         UserCommand cmd = new Find();
         when(dbManager.isConnected()).thenReturn(true);
         when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
-        when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", "sobaka"},
-                                                                                          {"2", "Manya", "12345"}});
+        when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", "sobaka"}, {"2", "Manya", "12345"}});
         // when
         cmd.process("find|user");
         // then
