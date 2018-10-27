@@ -26,6 +26,7 @@ public class Controller {
                 new Clear(),
                 new Insert(),
                 new Update(),
+                new Delete(),
                 new Exit(),
                 new Test(),
                 help

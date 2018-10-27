@@ -67,6 +67,7 @@
              +  345   +  eva    +     pupkina      +
              +--------+---------+------------------+
 ~~~
+*
    - ***insert***
        - Команда для вставки одной строки в заданную таблицу
        - Формат: insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN

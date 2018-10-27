@@ -20,5 +20,7 @@ public interface DatabaseManager {
 
     void update(DataSet update, DataSet where);
 
+    void delete(DataSet key);
+
     boolean isConnected();
 }

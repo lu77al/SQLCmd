@@ -113,6 +113,16 @@ public class JDBCManager implements DatabaseManager {
         return getTableContent(sql);
     }
 
+    @Override
+    public void delete(DataSet key) {
+        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
+        try {
+            executeSQL("DELETE FROM " + selectedTable + " WHERE " + whereList);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't delete rows form table <%s>", selectedTable));
+        }
+    }
+
     private Object[][] getTableContent(String sql) {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql))

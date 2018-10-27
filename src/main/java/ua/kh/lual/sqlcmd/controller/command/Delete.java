@@ -5,22 +5,15 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
-import java.util.Arrays;
-
-public class Update extends UserCommandClass {
+public class Delete extends UserCommandClass{
     @Override
     public String format() {
-        return "update|tableName|destColumn|destValue|keyColumn|keyValue";
+        return "delete|tableName|column|value";
     }
 
     @Override
     public String description() {
-        return "Updates value of specified cells in the table <tableName>" +
-                "\t<destColumn> - name of column to update\n" +
-                "\t<destValue>  - new value for column to update\n" +
-                "\t<keyColumn>  - name of column to check before update\n" +
-                "\t<keyValue>   - update occurs if keyValue equals actual value of keyColumn\n" +
-                "\t  * data in several rows could be updated";
+        return "Deletes rows from table <tableName> in which column <column> has value <value>";
     }
 
     @Override
@@ -28,19 +21,18 @@ public class Update extends UserCommandClass {
         try {
             dbManager.selectTable(parameters[0]);
             DataSet whereRecord = new DataSet();
-            whereRecord.put(parameters[3], parameters[4]);
+            whereRecord.put(parameters[1], parameters[2]);
             Object[][] updatePreviousState = dbManager.getFilteredContent(whereRecord);
             if (updatePreviousState.length == 0) {
-                view.write("Nothing matches key field. No update performed");
+                view.write("Nothing matches key field. No delete performed");
                 return;
             }
             view.write(new TextTable(dbManager.getTableHeader(), updatePreviousState, 2).toString());
-            DataSet updateRecord = new DataSet();
-            updateRecord.put(parameters[1], parameters[2]);
-            dbManager.update(updateRecord, whereRecord);
-            view.write("Rows above where updated");
+            dbManager.delete(whereRecord);
+            view.write("Rows above where deleted");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
+
     }
 }
