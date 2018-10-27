@@ -10,12 +10,30 @@ public abstract class UserCommandClass implements UserCommand{
     static View view;
     static DatabaseManager dbManager;
 
+    public static void setView(View view) {
+        UserCommandClass.view = view;
+    }
+
+    public static void setDbManager(DatabaseManager dbManager) {
+        UserCommandClass.dbManager = dbManager;
+    }
+
     @Override
     public abstract String format();
+
     @Override
     public abstract String description();
+
     @Override
-    public abstract void process(String command) throws CommandFailedException;
+    public void process(String command) {
+        if (requestsConnection()) {
+            throw new CommandFailedException("Please connect to database before using command " + command +
+                    "\n\tUse command <" + new Connect().format());
+        }
+        String[] result = command.split("\\|");
+        checkParametersCount(result.length - 1);
+        execute(Arrays.copyOfRange(result, 1, result.length));
+    };
 
     @Override
     public boolean canProcess(String command) {
@@ -27,15 +45,7 @@ public abstract class UserCommandClass implements UserCommand{
         return estimated[0].equals(entered[0]);
     }
 
-    protected String[] extractParameters(String command) {
-        if (requestsConnection()) {
-            throw new CommandFailedException("Please connect to database before using command " + command +
-                                             "\n\tUse command <" + new Connect().format());
-        }
-        String[] result = command.split("\\|");
-        checkParametersCount(result.length - 1);
-        return Arrays.copyOfRange(result, 1, result.length);
-    }
+    protected abstract void execute(String[] parameters);
 
     protected void checkParametersCount(int actualCount) {
         int expectedCount = format().split("\\|").length - 1;
@@ -50,16 +60,7 @@ public abstract class UserCommandClass implements UserCommand{
         throw new CommandFailedException(errorMessage);
     }
 
-    @Override
-    public boolean requestsConnection() {
+    protected boolean requestsConnection() {
         return !dbManager.isConnected();
-    }
-
-    public static void setView(View view) {
-        UserCommandClass.view = view;
-    }
-
-    public static void setDbManager(DatabaseManager dbManager) {
-        UserCommandClass.dbManager = dbManager;
     }
 }

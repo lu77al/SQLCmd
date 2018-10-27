@@ -17,8 +17,7 @@ public class Find extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) {
-        String[] parameters = extractParameters(command);
+    protected void execute(String[] parameters) {
         try {
             dbManager.selectTable(parameters[0]);
             view.write(new TextTable(dbManager.getTableHeader(),

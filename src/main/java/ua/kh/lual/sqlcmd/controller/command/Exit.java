@@ -16,8 +16,7 @@ public class Exit extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) {
-        extractParameters(command);
+    protected void execute(String[] parameters) {
         view.write("Bye");
         view.write("See you later ;)");
         throw new ExitException();

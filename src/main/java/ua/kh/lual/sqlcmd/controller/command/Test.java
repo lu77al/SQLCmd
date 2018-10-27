@@ -16,8 +16,7 @@ public class Test extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) throws CommandFailedException {
-        String[] parameters = extractParameters(command);
+    protected void execute(String[] parameters) {
         view.write("Test'll be here soon");
     }
 

@@ -21,8 +21,7 @@ public class Help extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) {
-        extractParameters(command);
+    protected void execute(String[] parameters) {
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
             view.write("\t" + cmd.format());

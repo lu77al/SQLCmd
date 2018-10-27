@@ -14,5 +14,4 @@ public interface UserCommand {
 
     void process(String command) throws CommandFailedException;
 
-    boolean requestsConnection();
 }

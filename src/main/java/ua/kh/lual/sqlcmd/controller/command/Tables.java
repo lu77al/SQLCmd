@@ -18,8 +18,7 @@ public class Tables extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) {
-        extractParameters(command);
+    protected void execute(String[] parameters) {
         try {
             String[] tableNames = dbManager.getTableNames();
             String message = Arrays.toString(tableNames);

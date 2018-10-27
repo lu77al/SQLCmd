@@ -15,8 +15,7 @@ public class Connect extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) {
-        String[] parameters = extractParameters(command);
+    protected void execute(String[] parameters) {
         try {
             String database = parameters[0];
             String user = parameters[1];

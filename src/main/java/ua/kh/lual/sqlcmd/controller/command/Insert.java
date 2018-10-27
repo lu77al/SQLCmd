@@ -23,8 +23,7 @@ public class Insert extends UserCommandClass {
     }
 
     @Override
-    public void process(String command) throws CommandFailedException {
-        String[] parameters = extractParameters(command);
+    protected void execute(String[] parameters) {
         try {
             dbManager.selectTable(parameters[0]);
             DataSet insert = new DataSet();
