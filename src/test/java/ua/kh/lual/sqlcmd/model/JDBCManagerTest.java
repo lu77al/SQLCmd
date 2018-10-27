@@ -2,6 +2,7 @@ package ua.kh.lual.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.kh.lual.sqlcmd.NamesAndPasswords;
 
 import java.util.Arrays;
 
@@ -11,10 +12,10 @@ import static org.junit.Assert.assertFalse;
 
 public class JDBCManagerTest {
 
-    private static final String database =  "sqlcmd";
-    private static final String user =      "postgres";
-    private static final String password =  "12345";
-    private static final String table =     "modeltesttable";
+    private static final String database = NamesAndPasswords.database;
+    private static final String user = NamesAndPasswords.user;
+    private static final String password = NamesAndPasswords.password;
+    private static final String table = NamesAndPasswords.table;
 
     private DatabaseManager dbManager;
 
