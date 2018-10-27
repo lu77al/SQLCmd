@@ -14,13 +14,17 @@ public interface DatabaseManager {
 
     Object[][] getFilteredContent(DataSet key);
 
-    void dropTable();
+    void clearTable();
 
     void insert(DataSet record);
 
     void update(DataSet update, DataSet where);
 
     void delete(DataSet key);
+
+    void createTable(String tableName, String[] columns);
+
+    void dropTable(String tableName);
 
     boolean isConnected();
 }

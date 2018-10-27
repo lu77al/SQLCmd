@@ -12,6 +12,11 @@ public class JDBCManager implements DatabaseManager {
     private String selectedTable;
 
     @Override
+    public boolean isConnected() {
+        return connection != null;
+    }
+
+    @Override
     public void connect(String database, String user, String password) {
         try {
             Class.forName("org.postgresql.Driver");
@@ -53,7 +58,7 @@ public class JDBCManager implements DatabaseManager {
 
     @Override
     public void selectTable(String tableName) {
-        selectedTable = "\"" + tableName + "\"";
+        selectedTable = "\"" + tableName.toLowerCase() + "\"";
     }
 
     @Override
@@ -76,7 +81,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void dropTable() {
+    public void clearTable() {
         try {
             executeSQL("DELETE FROM " + selectedTable);
         } catch (SQLException e) {
@@ -123,6 +128,26 @@ public class JDBCManager implements DatabaseManager {
         }
     }
 
+    @Override
+    public void createTable(String tableName, String[] columns) {
+        String sql = "CREATE TABLE " + tableName + " (" +
+                     prepareList("\"%s\" text", columns) + ")";
+        try {
+            executeSQL(sql);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't create table <%s>", selectedTable));
+        }
+    }
+
+    @Override
+    public void dropTable(String tableName) {
+        try {
+            executeSQL("DROP TABLE " + tableName);
+        } catch (SQLException e) {
+            throw new JDBCManagerException(String.format("Can't drop table <%s>", selectedTable));
+        }
+    }
+
     private Object[][] getTableContent(String sql) {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql))
@@ -144,11 +169,6 @@ public class JDBCManager implements DatabaseManager {
         } catch (SQLException e) {
             throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
-    }
-
-    @Override
-    public boolean isConnected() {
-        return connection != null;
     }
 
     private int getTableSize() {

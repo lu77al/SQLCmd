@@ -38,7 +38,7 @@ public class JDBCManagerTest {
 
     @Test
     public void testAddGetTableData() {
-        dbManager.dropTable();
+        dbManager.clearTable();
         DataSet record = new DataSet();
         record.put("id", 1);
         record.put("name", "Vasya");
@@ -60,6 +60,16 @@ public class JDBCManagerTest {
         whereRecord.put("name", "Vasya");
         dbManager.update(updateRecord, whereRecord);
         assertEquals("[[2, Manya, parol], [1, Vasya, baraban]]", Arrays.deepToString(dbManager.getAllContent()));
+    }
+
+    @Test
+    public void createDropTable() {
+        testAddGetTableData();
+        dbManager.createTable("TestCreate", new String[]{"iD", "Model", "Price"});
+        dbManager.selectTable("TestCreate");
+        assertEquals("[iD, Model, Price]", Arrays.deepToString(dbManager.getTableHeader()));
+        dbManager.dropTable("testcreate");
+        assertEquals(-1, Arrays.toString(dbManager.getTableNames()).indexOf("testcreate"));
     }
 
     @Test

@@ -18,7 +18,7 @@ public class Clear extends UserCommandClass {
     protected void execute(String[] parameters) {
         try {
             dbManager.selectTable(parameters[0]);
-            dbManager.dropTable();
+            dbManager.clearTable();
             view.write("Table <" + parameters[0] + "> was cleared");
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
