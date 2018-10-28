@@ -2,48 +2,86 @@ package ua.kh.lual.sqlcmd.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.*;
 import ua.kh.lual.sqlcmd.controller.command.Find;
-import ua.kh.lual.sqlcmd.controller.command.UserCommand;
-import ua.kh.lual.sqlcmd.controller.command.UserCommandClass;
-import ua.kh.lual.sqlcmd.model.DatabaseManager;
-import ua.kh.lual.sqlcmd.view.View;
 
 import static org.junit.Assert.assertEquals;
 
-public class FindTest {
-
-    private DatabaseManager dbManager;
-    private View view;
+public class FindTest extends ABasicCommandTestClass {
 
     @Before
     public void setup() {
-        dbManager = mock(DatabaseManager.class);
-        view = mock(View.class);
-        UserCommandClass.setDbManager(dbManager);
-        UserCommandClass.setView(view);
+        setupMocks();
+        cmd = new Find();
     }
 
     @Test
-    public void process() {
+    public void testFindTypical() {
         // given
-        UserCommand cmd = new Find();
-        when(dbManager.isConnected()).thenReturn(true);
         when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
         when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", "sobaka"}, {"2", "Manya", "12345"}});
         // when
         cmd.process("find|user");
         // then
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(view, atLeastOnce()).write(captor.capture());
-        String expected =
+        assertOutput( "" +
                 "+------+---------+------------+\n" +
                 "+  id  +  name   +  password  +\n" +
                 "+------+---------+------------+\n" +
                 "+  1   +  Vasya  +   sobaka   +\n" +
                 "+  2   +  Manya  +   12345    +\n" +
-                "+------+---------+------------+";
-        assertEquals(expected, captor.getValue().toString());
+                "+------+---------+------------+\n");
     }
+
+    @Test
+    public void testFindNull() {
+        // given
+        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+        when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", null}, {"2", "Manya", null}});
+        // when
+        cmd.process("find|user");
+        // then
+        assertOutput( "" +
+                "+------+---------+------------+\n" +
+                "+  id  +  name   +  password  +\n" +
+                "+------+---------+------------+\n" +
+                "+  1   +  Vasya  +   [null]   +\n" +
+                "+  2   +  Manya  +   [null]   +\n" +
+                "+------+---------+------------+\n"
+        );
+    }
+
+    @Test
+    public void testFindEmpty() {
+        // given
+        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+        when(dbManager.getAllContent("user")).thenReturn(new Object[][]{});
+        // when
+        cmd.process("find|user");
+        // then
+        assertOutput( "" +
+                "+------+--------+------------+\n" +
+                "+  id  +  name  +  password  +\n" +
+                "+------+--------+------------+\n"
+        );
+    }
+
+    @Test
+    public void testFindOneColumn() {
+        // given
+        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"name"});
+        when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"Vasya"}, {"Manya"}});
+        // when
+        cmd.process("find|user");
+        // then
+        assertOutput( "" +
+                "+---------+\n" +
+                "+  name   +\n" +
+                "+---------+\n" +
+                "+  Vasya  +\n" +
+                "+  Manya  +\n" +
+                "+---------+\n"
+        );
+    }
+
 }

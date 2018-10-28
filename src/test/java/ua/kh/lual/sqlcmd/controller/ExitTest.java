@@ -1,26 +1,38 @@
 package ua.kh.lual.sqlcmd.controller;
 
+import org.junit.Before;
 import org.junit.Test;
 import ua.kh.lual.sqlcmd.controller.command.Exit;
-import ua.kh.lual.sqlcmd.controller.command.UserCommand;
-import static junit.framework.TestCase.assertTrue;
+import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
+import ua.kh.lual.sqlcmd.model.DataSet;
 
-public class ExitTest {
-/*
+import static junit.framework.TestCase.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
-    @Test
-    public void testCanProcess() {
-        UserCommand cmd = new Exit();
-        boolean canProcess = cmd.canProcess("exit");
-        assertTrue(canProcess);
+public class ExitTest extends ABasicCommandTestClass {
+
+    @Before
+    public void setup() {
+        setupMocks();
+        cmd = new Exit();
     }
 
     @Test
-    public void testCanProcess() {
-        UserCommand cmd = new Exit();
-        boolean canProcess = cmd.canProcess("exit");
-        assertTrue(canProcess);
+    public void testExit() {
+        // given
+        // when
+        try {
+            cmd.process("exit");
+            fail("ExitException was expected but wasn't thrown");
+        } catch (ExitException e) {
+            // do nothing
+        }
+        // then
+        assertOutput( "" +
+                "Bye\n" +
+                "See you later ;)\n");
     }
 
-*/
 }
