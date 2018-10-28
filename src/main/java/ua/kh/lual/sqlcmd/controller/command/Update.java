@@ -16,10 +16,10 @@ public class Update extends UserCommandClass {
     @Override
     public String description() {
         return "Updates value of specified cells in the table <tableName>" +
-                "\t<destColumn> - name of column to update\n" +
-                "\t<destValue>  - new value for column to update\n" +
-                "\t<keyColumn>  - name of column to check before update\n" +
-                "\t<keyValue>   - update occurs if keyValue equals actual value of keyColumn\n" +
+                "\tdestColumn - name of column to update\n" +
+                "\tdestValue  - new value for column to update\n" +
+                "\tkeyColumn  - name of column to check before update\n" +
+                "\tkeyValue   - update occurs if keyValue equals actual value of keyColumn\n" +
                 "\t  * data in several rows could be updated";
     }
 

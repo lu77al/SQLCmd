@@ -12,9 +12,9 @@ public class Test extends UserCommandClass {
 
     @Override
     public String description() {
-        return "Executes some hardcoded sequences. Can be used as additional runtime test tool" +
-                "\t<n> - test to start" +
-                "\twithout parameter <n> starts previously started test (1 an startup)";
+        return "Executes some hardcoded sequences. Can be used as additional runtime test tool\n" +
+                "\tn - test to start. Now available 1 <'|1>\n" +
+                "\twithout parameter <n> starts previously started test (startupDefaultTest an startup)";
     }
 
     @Override

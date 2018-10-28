@@ -48,17 +48,17 @@ public class HelpTest extends ABasicCommandTestClass {
                 "\t\tClears table <tableName>\n" +
                 "\tinsert|tableName|column1|value1|column2|value2| ... |columnN |valueN\n" +
                 "\t\tInserts one new row in the table <tableName>\n" +
-                "\t\t\t<column1> - name of first column to insert\n" +
-                "\t\t\t<value1>  - value to insert into first column\n" +
-                "\t\t\t<column2> - name of second column to insert\n" +
-                "\t\t\t<value2>  - value to insert into second column\n" +
-                "\t\t\t<columnN> - name of N's column to insert\n" +
-                "\t\t\t<valueN>  - value to insert into N's column\n" +
+                "\t\t\tcolumn1 - name of first column to insert\n" +
+                "\t\t\tvalue1  - value to insert into first column\n" +
+                "\t\t\tcolumn2 - name of second column to insert\n" +
+                "\t\t\tvalue2  - value to insert into second column\n" +
+                "\t\t\tcolumnN - name of N's column to insert\n" +
+                "\t\t\tvalueN  - value to insert into N's column\n" +
                 "\tupdate|tableName|destColumn|destValue|keyColumn|keyValue\n" +
-                "\t\tUpdates value of specified cells in the table <tableName>\t<destColumn> - name of column to update\n" +
-                "\t\t\t<destValue>  - new value for column to update\n" +
-                "\t\t\t<keyColumn>  - name of column to check before update\n" +
-                "\t\t\t<keyValue>   - update occurs if keyValue equals actual value of keyColumn\n" +
+                "\t\tUpdates value of specified cells in the table <tableName>\tdestColumn - name of column to update\n" +
+                "\t\t\tdestValue  - new value for column to update\n" +
+                "\t\t\tkeyColumn  - name of column to check before update\n" +
+                "\t\t\tkeyValue   - update occurs if keyValue equals actual value of keyColumn\n" +
                 "\t\t\t  * data in several rows could be updated\n" +
                 "\tdelete|tableName|column|value\n" +
                 "\t\tDeletes rows from table <tableName> in which column <column> has value <value>\n" +
@@ -69,7 +69,9 @@ public class HelpTest extends ABasicCommandTestClass {
                 "\texit\n" +
                 "\t\tTerminates application\n" +
                 "\t`|[n]\n" +
-                "\t\tExecutes some hardcoded sequences. Can be used as additional runtime test tool\t<n> - test to start\twithout parameter <n> starts previously started test (1 an startup)\n" +
+                "\t\tExecutes some hardcoded sequences. Can be used as additional runtime test tool\n" +
+                "\t\t\tn - test to start. Now available 1 <'|1>\n" +
+                "\t\t\twithout parameter <n> starts previously started test (startupDefaultTest an startup)\n" +
                 "\thelp\n" +
                 "\t\tPrints this brief commands summary\n");
     }

@@ -161,7 +161,9 @@ public class IntegrationTest {
                 "\texit\n" +
                 "\t\tTerminates application\n" +
                 "\t`|[n]\n" +
-                "\t\tExecutes some hardcoded sequences. Can be used as additional runtime test tool\tn - test to start\twithout parameter n starts previously started test (1 an startup)\n" +
+                "\t\tExecutes some hardcoded sequences. Can be used as additional runtime test tool\n" +
+                "\t\t\tn - test to start. Now available 1 '|1\n" +
+                "\t\t\twithout parameter n starts previously started test (startupDefaultTest an startup)\n" +
                 "\thelp\n" +
                 "\t\tPrints this brief commands summary\n" +
                 askCommandReport();
