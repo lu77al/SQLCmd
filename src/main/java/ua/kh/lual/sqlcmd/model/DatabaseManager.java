@@ -10,7 +10,7 @@ public interface DatabaseManager {
 
     void connect(String database, String user, String password);
 
-    String[] getTableHeader(String tableName);
+    Set<String> getTableHeader(String tableName);
 
     Object[][] getAllContent(String tableName);
 

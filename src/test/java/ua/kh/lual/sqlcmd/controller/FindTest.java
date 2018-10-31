@@ -6,6 +6,9 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 import ua.kh.lual.sqlcmd.controller.command.Find;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static org.junit.Assert.assertEquals;
 
 public class FindTest extends ABasicCommandTestClass {
@@ -19,7 +22,8 @@ public class FindTest extends ABasicCommandTestClass {
     @Test
     public void testFindTypical() {
         // given
-        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+//        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+        when(dbManager.getTableHeader("user")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
         when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", "sobaka"}, {"2", "Manya", "12345"}});
         // when
         cmd.process("find|user");
@@ -36,7 +40,7 @@ public class FindTest extends ABasicCommandTestClass {
     @Test
     public void testFindNull() {
         // given
-        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+        when(dbManager.getTableHeader("user")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
         when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"1", "Vasya", null}, {"2", "Manya", null}});
         // when
         cmd.process("find|user");
@@ -54,7 +58,7 @@ public class FindTest extends ABasicCommandTestClass {
     @Test
     public void testFindEmpty() {
         // given
-        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"id", "name", "password"});
+        when(dbManager.getTableHeader("user")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
         when(dbManager.getAllContent("user")).thenReturn(new Object[][]{});
         // when
         cmd.process("find|user");
@@ -69,7 +73,7 @@ public class FindTest extends ABasicCommandTestClass {
     @Test
     public void testFindOneColumn() {
         // given
-        when(dbManager.getTableHeader("user")).thenReturn(new String[]{"name"});
+        when(dbManager.getTableHeader("user")).thenReturn(new LinkedHashSet<String>(Arrays.asList("name")));
         when(dbManager.getAllContent("user")).thenReturn(new Object[][]{{"Vasya"}, {"Manya"}});
         // when
         cmd.process("find|user");

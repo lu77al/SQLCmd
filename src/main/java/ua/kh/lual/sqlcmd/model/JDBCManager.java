@@ -61,13 +61,13 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getTableHeader(String tableName) {
+    public Set<String> getTableHeader(String tableName) {
         String selectedTable = normalizeTableName(tableName);
         try (PreparedStatement st = connection.prepareStatement("SELECT * FROM " + selectedTable + " WHERE false")) {
             ResultSetMetaData md = st.getMetaData();
-            String[] columnNames = new String[md.getColumnCount()];
-            for (int i = 0; i < columnNames.length; i++) {
-                columnNames[i] = md.getColumnName(i + 1);
+            Set<String> columnNames = new LinkedHashSet<>();
+            for (int i = 1; i <= md.getColumnCount(); i++) {
+                columnNames.add(md.getColumnName(i));
             }
             return columnNames;
         } catch (SQLException e) {

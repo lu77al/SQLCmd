@@ -27,7 +27,7 @@ public class Delete extends UserCommandClass{
                 view.write("Nothing matches key field. No delete performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
+            view.write(new TextTable(dbManager.getTableHeader(table).toArray(), updatePreviousState, 2).toString());
             dbManager.delete(table, whereRecord);
             view.write("Rows above where deleted");
         } catch (JDBCManagerException e) {

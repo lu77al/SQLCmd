@@ -34,7 +34,7 @@ public class Update extends UserCommandClass {
                 view.write("Nothing matches key field. No update performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
+            view.write(new TextTable(dbManager.getTableHeader(table).toArray(), updatePreviousState, 2).toString());
             DataSet updateRecord = new DataSet();
             updateRecord.put(parameters[1], parameters[2]);
             dbManager.update(table, updateRecord, whereRecord);

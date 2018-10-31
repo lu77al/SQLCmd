@@ -92,7 +92,7 @@ public class JDBCManagerTest {
     @Test
     public void testGetTableHeader() {
         createTable();
-        String header = Arrays.toString(dbManager.getTableHeader(table));
+        String header = dbManager.getTableHeader(table).toString();
         dropTable();
         assertEquals("[name, password]", header);
     }
