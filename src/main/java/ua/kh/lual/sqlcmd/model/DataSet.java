@@ -1,5 +1,6 @@
 package ua.kh.lual.sqlcmd.model;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.Arrays;
 
 public class DataSet {
@@ -77,4 +78,20 @@ public class DataSet {
                 "values:" + Arrays.toString(getValues()) + "\n" +
                 "}";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        DataSet pair = (DataSet) obj;
+        if (getLength() != pair.getLength()) {
+            return false;
+        }
+        return
+           getNames().toString() == pair.getNames().toString()
+             &
+           getValues().toString() == pair.getValues().toString();
+    }
+
 }

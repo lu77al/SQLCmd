@@ -3,6 +3,9 @@ package ua.kh.lual.sqlcmd.model;
 
 import java.sql.*;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 
@@ -42,20 +45,15 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getTableNames() {
+    public Set<String> getTableNames() {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables" +
                                                 " WHERE table_schema='public' AND table_type='BASE TABLE'"))
         {
-            String[] tables = new String[20];
-            int index = 0;
+            Set<String> tables = new LinkedHashSet<>();
             while (rs.next()) {
-                if (index >= tables.length) {
-                    tables = resizeArray(tables, tables.length + 20);
-                }
-                tables[index++] = rs.getString("table_name");
+                tables.add(rs.getString("table_name"));
             }
-            tables = resizeArray(tables, index);
             return tables;
         } catch (SQLException e) {
             throw new JDBCManagerException("Can't get tables names");

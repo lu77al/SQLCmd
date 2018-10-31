@@ -1,10 +1,12 @@
 package ua.kh.lual.sqlcmd.model;
 
+import java.util.Set;
+
 public interface DatabaseManager {
 
     boolean isConnected();
 
-    String[] getTableNames();
+    Set<String> getTableNames();
 
     void connect(String database, String user, String password);
 

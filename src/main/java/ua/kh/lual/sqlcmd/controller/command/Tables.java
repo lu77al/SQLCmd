@@ -20,9 +20,7 @@ public class Tables extends UserCommandClass {
     @Override
     protected void execute(String[] parameters) {
         try {
-            String[] tableNames = dbManager.getTableNames();
-            String message = Arrays.toString(tableNames);
-            view.write(message);
+            view.write(dbManager.getTableNames().toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }

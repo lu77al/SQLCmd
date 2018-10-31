@@ -75,5 +75,4 @@ public class HelpTest extends ABasicCommandTestClass {
                 "\thelp\n" +
                 "\t\tPrints this brief commands summary\n");
     }
-
 }

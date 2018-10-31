@@ -84,7 +84,7 @@ public class JDBCManagerTest {
     @Test
     public void testGetTableNames() {
         createTable();
-        String tables = Arrays.toString(dbManager.getTableNames());
+        String tables = dbManager.getTableNames().toString();
         dropTable();
         assertTrue(tables.indexOf(table) != -1);
     }
