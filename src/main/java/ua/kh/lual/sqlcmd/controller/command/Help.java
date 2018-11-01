@@ -2,9 +2,11 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 
+import java.util.List;
+
 public class Help extends UserCommandClass {
 
-    UserCommand[] commandList;
+    List<UserCommand> commandList;
 
     @Override
     public String format() {
@@ -16,7 +18,7 @@ public class Help extends UserCommandClass {
         return "Prints this brief commands summary";
     }
 
-    public void setCommandList(UserCommand[] commandList) {
+    public void setCommandList(List<UserCommand> commandList) {
         this.commandList = commandList;
     }
 

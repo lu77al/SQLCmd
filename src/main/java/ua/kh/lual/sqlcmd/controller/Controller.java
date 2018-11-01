@@ -6,11 +6,14 @@ import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Controller {
 
     private View view;
 
-    private UserCommand[] commands;
+    private List<UserCommand> commands = new LinkedList<>();
 
     public Controller(View view, DatabaseManager dbManager) {
         this.view = view;
@@ -19,20 +22,18 @@ public class Controller {
         UserCommandClass.setView(view);
 
         Help help = new Help();
-        this.commands = new UserCommand[]{
-                new Connect(),
-                new Tables(),
-                new Find(),
-                new Clear(),
-                new Insert(),
-                new Update(),
-                new Delete(),
-                new Create(),
-                new Drop(),
-                new Exit(),
-                new Test(),
-                help
-        };
+        commands.add(new Connect());
+        commands.add(new Tables());
+        commands.add(new Find());
+        commands.add(new Clear());
+        commands.add(new Insert());
+        commands.add(new Update());
+        commands.add(new Delete());
+        commands.add(new Create());
+        commands.add(new Drop());
+        commands.add(new Exit());
+        commands.add(new Test());
+        commands.add(help);
         help.setCommandList(commands);
     }
 
