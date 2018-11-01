@@ -39,7 +39,7 @@ public class JDBCManagerTest {
     }
 
     private void fillTable() throws Exception {
-        DataSet row = new DataSet();
+        Map<String, Object> row = new LinkedHashMap<>();
         row.put("name", "Vasiliy");
         row.put("password", "parol");
         dbManager.insert(table, row);

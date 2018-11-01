@@ -93,10 +93,10 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void insert(String tableName, DataSet row) {
+    public void insert(String tableName, Map<String, Object> row) {
         String selectedTable = normalizeTableName(tableName);
-        String names = prepareList("\"%s\"", row.getNames());
-        String values = prepareList("'%s\'", row.getValues());
+        String names = prepareList_collection("\"%s\"", row.keySet());
+        String values = prepareList_collection("'%s\'", row.values());
         try {
             executeSQL("INSERT INTO " + selectedTable +" (" + names + ") VALUES (" + values + ")");
         } catch (SQLException e) {
@@ -221,5 +221,15 @@ public class JDBCManager implements DatabaseManager {
         }
         return list.substring(0, list.length() - 2);
     }
+
+    private String prepareList_collection(String item, Collection values) {
+        StringBuilder list = new StringBuilder();
+        for (Object value : values) {
+            list.append(String.format(item, value.toString()));
+            list.append(", ");
+        }
+        return list.substring(0, list.length() - 2);
+    }
+
 }
 

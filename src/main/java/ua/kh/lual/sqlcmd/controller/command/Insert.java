@@ -5,6 +5,9 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Insert extends UserCommandClass {
     @Override
     public String format() {
@@ -26,7 +29,7 @@ public class Insert extends UserCommandClass {
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            DataSet insert = new DataSet();
+            Map<String, Object> insert = new LinkedHashMap<>();
             for (int i = 1; i < parameters.length; i += 2) {
                 insert.put(parameters[i], parameters[i + 1]);
             }

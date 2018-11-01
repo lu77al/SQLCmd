@@ -20,7 +20,7 @@ public interface DatabaseManager {
 
     void clearTable(String tableName);
 
-    void insert(String tableName, DataSet record);
+    void insert(String tableName, Map<String, Object> record);
 
     void update(String tableName, Map<String, Object> update, Map<String, Object> where);
 
