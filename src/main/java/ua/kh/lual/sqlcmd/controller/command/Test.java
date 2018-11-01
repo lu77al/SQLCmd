@@ -2,6 +2,8 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 
+import java.util.List;
+
 public class Test extends UserCommandClass {
     String testId = "startupDefaultTest";
 
@@ -18,9 +20,9 @@ public class Test extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
-        if (parameters.length != 0) { // connect my test DB
-            testId = parameters[0];
+    protected void execute(List<String> parameters) {
+        if (parameters.size() != 0) { // connect my test DB
+            testId = parameters.get(0);
         } else {
             view.write("Test to execute:  <" + testId + ">");
         }

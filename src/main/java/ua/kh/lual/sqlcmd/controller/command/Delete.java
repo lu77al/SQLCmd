@@ -1,7 +1,6 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
@@ -21,11 +20,11 @@ public class Delete extends UserCommandClass{
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
+            String table = parameters.get(0);
             Map<String, Object> whereRecord = new LinkedHashMap<>();
-            whereRecord.put(parameters[1], parameters[2]);
+            whereRecord.put(parameters.get(1), parameters.get(2));
             List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.size() == 0) {
                 view.write("Nothing matches key field. No delete performed");

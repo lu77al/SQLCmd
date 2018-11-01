@@ -2,9 +2,7 @@ package ua.kh.lual.sqlcmd.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import ua.kh.lual.sqlcmd.controller.command.Delete;
 import ua.kh.lual.sqlcmd.controller.command.Update;
-import ua.kh.lual.sqlcmd.model.DataSet;
 
 import java.util.*;
 

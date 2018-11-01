@@ -3,6 +3,8 @@ package ua.kh.lual.sqlcmd.controller.command;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
+import java.util.List;
+
 public class Connect extends UserCommandClass {
     @Override
     public String format() {
@@ -15,11 +17,11 @@ public class Connect extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String database = parameters[0];
-            String user = parameters[1];
-            String password = parameters[2];
+            String database = parameters.get(0);
+            String user = parameters.get(1);
+            String password = parameters.get(2);
             dbManager.connect(database, user, password);
             view.write(String.format("User <%s> successfully connected to database <%s>", user, database));
         } catch (JDBCManagerException e) {

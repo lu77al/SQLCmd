@@ -2,14 +2,11 @@ package ua.kh.lual.sqlcmd.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import ua.kh.lual.sqlcmd.controller.command.Create;
 import ua.kh.lual.sqlcmd.controller.command.Insert;
-import ua.kh.lual.sqlcmd.model.DataSet;
 
 import java.util.LinkedHashMap;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 

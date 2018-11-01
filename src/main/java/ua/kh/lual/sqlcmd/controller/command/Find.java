@@ -4,6 +4,8 @@ import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
+import java.util.List;
+
 public class Find extends UserCommandClass {
 
     @Override
@@ -17,15 +19,12 @@ public class Find extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
+            String table = parameters.get(0);
             view.write(new TextTable(dbManager.getTableHeader(table),
                     dbManager.getAllContent(table),
                     2).toString());
-//            view.write(new TextTable(dbManager.getTableHeader(table),
-//                    dbManager.getAllContent(table),
-//                    2).toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }

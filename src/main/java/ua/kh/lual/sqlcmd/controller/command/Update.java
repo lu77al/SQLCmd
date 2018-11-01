@@ -1,7 +1,6 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
@@ -24,11 +23,11 @@ public class Update extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
+            String table = parameters.get(0);
             Map<String, Object> whereRecord= new LinkedHashMap<>();
-            whereRecord.put(parameters[3], parameters[4]);
+            whereRecord.put(parameters.get(3), parameters.get(4));
             List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.size() == 0) {
                 view.write("Nothing matches key field. No update performed");
@@ -36,7 +35,7 @@ public class Update extends UserCommandClass {
             }
             view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
             Map<String, Object> updateRecord= new LinkedHashMap<>();
-            updateRecord.put(parameters[1], parameters[2]);
+            updateRecord.put(parameters.get(1), parameters.get(2));
             dbManager.update(table, updateRecord, whereRecord);
             view.write("Rows above where updated");
         } catch (JDBCManagerException e) {

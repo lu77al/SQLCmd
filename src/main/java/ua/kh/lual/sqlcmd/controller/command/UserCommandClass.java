@@ -34,8 +34,7 @@ public abstract class UserCommandClass implements UserCommand{
         }
         List<String> chunks = new ArrayList<>(Arrays.asList(command.split("\\|")));
         checkParametersCount(chunks.size() - 1);
-        execute(chunks.subList(1, chunks.size()).toArray(new String[0]));
-//        execute(Arrays.copyOfRange(result, 1, result.length));
+        execute(chunks.subList(1, chunks.size()));
     };
 
     @Override
@@ -48,7 +47,7 @@ public abstract class UserCommandClass implements UserCommand{
         return estimated[0].equals(entered[0]);
     }
 
-    protected abstract void execute(String[] parameters);
+    protected abstract void execute(List<String> parameters);
 
     protected void checkParametersCount(int actualCount) {
         int expectedCount = format().split("\\|").length - 1;

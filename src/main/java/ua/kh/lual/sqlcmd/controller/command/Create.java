@@ -1,12 +1,9 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Create extends UserCommandClass {
     @Override
@@ -20,10 +17,10 @@ public class Create extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
-            Set<String> columns = new LinkedHashSet<>(Arrays.asList(Arrays.copyOfRange(parameters, 1, parameters.length)));
+            String table = parameters.get(0);
+            Set<String> columns = new LinkedHashSet<>(parameters.subList(1, parameters.size()));
             dbManager.createTable(table, columns);
             view.write("Table <" + table + "> was created successfully");
         } catch (JDBCManagerException e) {

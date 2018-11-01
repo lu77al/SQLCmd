@@ -3,7 +3,7 @@ package ua.kh.lual.sqlcmd.controller.command;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class Tables extends UserCommandClass {
 
@@ -18,7 +18,7 @@ public class Tables extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
             view.write(dbManager.getTableNames().toString());
         } catch (JDBCManagerException e) {

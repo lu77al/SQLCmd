@@ -1,11 +1,10 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
-import ua.kh.lual.sqlcmd.utils.TextTable;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Insert extends UserCommandClass {
@@ -26,12 +25,12 @@ public class Insert extends UserCommandClass {
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
+            String table = parameters.get(0);
             Map<String, Object> insert = new LinkedHashMap<>();
-            for (int i = 1; i < parameters.length; i += 2) {
-                insert.put(parameters[i], parameters[i + 1]);
+            for (int i = 1; i < parameters.size(); i += 2) {
+                insert.put(parameters.get(i), parameters.get(i + 1));
             }
             dbManager.insert(table, insert);
             view.write("New data added successfully");

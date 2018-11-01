@@ -4,12 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import ua.kh.lual.sqlcmd.controller.command.Exit;
 import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
-import ua.kh.lual.sqlcmd.model.DataSet;
 
 import static junit.framework.TestCase.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 public class ExitTest extends ABasicCommandTestClass {
 

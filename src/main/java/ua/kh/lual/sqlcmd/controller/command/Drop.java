@@ -3,6 +3,8 @@ package ua.kh.lual.sqlcmd.controller.command;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
+import java.util.List;
+
 public class Drop extends UserCommandClass{
 
     @Override
@@ -16,9 +18,9 @@ public class Drop extends UserCommandClass{
     }
 
     @Override
-    protected void execute(String[] parameters) {
+    protected void execute(List<String> parameters) {
         try {
-            String table = parameters[0];
+            String table = parameters.get(0);
             dbManager.dropTable(table);
             view.write("Table <" + table + "> was deleted");
         } catch (JDBCManagerException e) {
