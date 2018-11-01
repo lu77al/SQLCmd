@@ -39,12 +39,12 @@ public abstract class UserCommandClass implements UserCommand{
 
     @Override
     public boolean canProcess(String command) {
-        String[] estimated = format().split("\\|");
-        String[] entered = command.split("\\|");
-        if (entered.length == 0) {
+        List<String> estimated = new ArrayList<>(Arrays.asList(format().split("\\|")));
+        List<String> entered = new ArrayList<>(Arrays.asList(command.split("\\|")));
+        if (entered.size() == 0) {
             return false;
         }
-        return estimated[0].equals(entered[0]);
+        return estimated.get(0).equals(entered.get(0));
     }
 
     protected abstract void execute(List<String> parameters);
