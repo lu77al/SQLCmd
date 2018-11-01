@@ -1,12 +1,14 @@
 package ua.kh.lual.sqlcmd.utils;
 
+import java.util.*;
+
 public class TextTable {
-    private Object[] header;
-    private Object[][] content;
+    private Set header;
+    private List<List> content;
     private int margin;
 
 
-    public TextTable(Object[] header, Object[][] content, int margin) {
+    public TextTable(Set header, List<List> content, int margin) {
         this.header = header;
         this.content = content;
         this.margin = margin;
@@ -14,13 +16,13 @@ public class TextTable {
 
     @Override
     public String toString() {
-        int[] columnsWidth = getColumnsWidth();
+        List<Integer> columnsWidth = getColumnsWidth();
         String horizontalLine = getTableHorizontalLine(columnsWidth);
         String result = horizontalLine + '\n';
-        result += getTableRow(header, columnsWidth) + '\n';
-        if (content.length != 0) {
+        result += getTableRow(new ArrayList(header), columnsWidth) + '\n';
+        if (content.size() != 0) {
             result += horizontalLine + '\n';
-            for (Object[] row : content) {
+            for (List row : content) {
                 result += getTableRow(row, columnsWidth) + '\n';
             }
         }
@@ -28,31 +30,34 @@ public class TextTable {
         return result;
     }
 
-    static final String nullString = "[null]";
+    private static final String nullString = "[null]";
 
-    private int[] getColumnsWidth() {
-        int[] columnWidth = new int[header.length];
-        for (int i = 0; i < header.length; i++) {
-            columnWidth[i] = header[i].toString().length();
-            for (Object[] rowCells: content) {
+    private List<Integer> getColumnsWidth() {
+        List<Integer> columnWidth = new ArrayList<>(header.size());
+        int columnIndex = 0;
+        for (Object column: header) {
+            int biggestWidth = column.toString().length();
+            for (List row: content) {
+                Object cell = row.get(columnIndex);
                 int width;
-                if (rowCells[i] != null) {
-                    width = rowCells[i].toString().length();
+                if (cell != null) {
+                    width = cell.toString().length();
                 } else {
                     width = nullString.length();
                 }
-                if (width > columnWidth[i]) {
-                    columnWidth[i] = width;
+                if (width > biggestWidth) {
+                    biggestWidth = width;
                 }
             }
-            columnWidth[i] += margin * 2;
+            columnWidth.add(columnIndex, biggestWidth +  margin * 2);
+            columnIndex++;
         }
         return columnWidth;
     }
 
-    private String getTableHorizontalLine(int[] columnWidth) {
+    private String getTableHorizontalLine(List<Integer> columnWidth) {
         StringBuilder result = new StringBuilder("+");
-        for (int width: columnWidth) {
+        for (Integer width: columnWidth) {
             for (int i = 0; i < width; i++) {
                 result.append('-');
             }
@@ -61,16 +66,18 @@ public class TextTable {
         return result.toString();
     }
 
-    private String getTableRow(Object[] items, int[] columnWidth) {
+    private String getTableRow(List items, List columnWidth) {
         StringBuilder result = new StringBuilder("+");
-        for (int i = 0; i < items.length; i++) {
-            String cell = (items[i] != null) ? items[i].toString() : nullString;
-            int frontMargin = (columnWidth[i] - cell.length()) / 2;
+        Iterator<Integer> widthIterator = columnWidth.iterator();
+        for (Object cellObject: items) {
+            String cell = (cellObject != null) ? cellObject.toString() : nullString;
+            int width = widthIterator.next();
+            int frontMargin = (width - cell.length()) / 2;
             for (int j = 0; j < frontMargin; j++) {
                 result.append(' ');
             }
             result.append(cell);
-            for (int j = 0; j < columnWidth[i] - cell.length() - frontMargin; j++) {
+            for (int j = 0; j < width - cell.length() - frontMargin; j++) {
                 result.append(' ');
             }
             result.append('+');

@@ -6,6 +6,7 @@ import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Update extends UserCommandClass {
     @Override
@@ -29,12 +30,12 @@ public class Update extends UserCommandClass {
             String table = parameters[0];
             DataSet whereRecord = new DataSet();
             whereRecord.put(parameters[3], parameters[4]);
-            Object[][] updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
-            if (updatePreviousState.length == 0) {
+            List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
+            if (updatePreviousState.size() == 0) {
                 view.write("Nothing matches key field. No update performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(table).toArray(), updatePreviousState, 2).toString());
+            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
             DataSet updateRecord = new DataSet();
             updateRecord.put(parameters[1], parameters[2]);
             dbManager.update(table, updateRecord, whereRecord);

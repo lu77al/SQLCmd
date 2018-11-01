@@ -2,10 +2,7 @@ package ua.kh.lual.sqlcmd.model;
 
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 
@@ -76,7 +73,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getAllContent(String tableName) {
+    public List<List> getAllContent(String tableName) {
         String selectedTable = normalizeTableName(tableName);
         try {
             return getTableContent("SELECT * FROM " + selectedTable);
@@ -120,7 +117,7 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public Object[][] getFilteredContent(String tableName, DataSet key) {
+    public List<List> getFilteredContent(String tableName, DataSet key) {
         String selectedTable = normalizeTableName(tableName);
         String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
         String sql = "SELECT * FROM " + selectedTable + " WHERE " + whereList;
@@ -168,24 +165,20 @@ public class JDBCManager implements DatabaseManager {
         return  "\"" + tableName.toLowerCase() + "\"";
     }
 
-    private Object[][] getTableContent(String sql) throws SQLException {
+    private List<List> getTableContent(String sql) throws SQLException {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql))
         {
             int tableWidth = rs.getMetaData().getColumnCount();
-            Object[][] data = new Object[100][];
-            int tableHeight = 0;
+            List<List> data = new LinkedList<>();
             while (rs.next()) {
-                if (tableHeight >= data.length) {
-                    data = resizeArray(data, tableHeight + 100);
-                }
-                data[tableHeight] = new Object[tableWidth];
+                List row = new ArrayList(tableWidth);
                 for (int colIndex = 1; colIndex <= tableWidth ; colIndex++) {
-                    data[tableHeight][colIndex - 1] = rs.getObject(colIndex);
+                    row.add(rs.getObject(colIndex));
                 }
-                tableHeight++;
+                data.add(row);
             }
-            return Arrays.copyOfRange(data, 0, tableHeight);
+            return data;
         }
     }
 

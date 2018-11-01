@@ -5,6 +5,8 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
+import java.util.List;
+
 public class Delete extends UserCommandClass{
     @Override
     public String format() {
@@ -22,12 +24,12 @@ public class Delete extends UserCommandClass{
             String table = parameters[0];
             DataSet whereRecord = new DataSet();
             whereRecord.put(parameters[1], parameters[2]);
-            Object[][] updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
-            if (updatePreviousState.length == 0) {
+            List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
+            if (updatePreviousState.size() == 0) {
                 view.write("Nothing matches key field. No delete performed");
                 return;
             }
-            view.write(new TextTable(dbManager.getTableHeader(table).toArray(), updatePreviousState, 2).toString());
+            view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
             dbManager.delete(table, whereRecord);
             view.write("Rows above where deleted");
         } catch (JDBCManagerException e) {

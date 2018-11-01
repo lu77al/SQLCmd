@@ -20,9 +20,12 @@ public class Find extends UserCommandClass {
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            view.write(new TextTable(dbManager.getTableHeader(table).toArray(),
+            view.write(new TextTable(dbManager.getTableHeader(table),
                     dbManager.getAllContent(table),
                     2).toString());
+//            view.write(new TextTable(dbManager.getTableHeader(table),
+//                    dbManager.getAllContent(table),
+//                    2).toString());
         } catch (JDBCManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }

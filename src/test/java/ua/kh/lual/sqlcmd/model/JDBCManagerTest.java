@@ -5,6 +5,7 @@ import org.junit.Test;
 import ua.kh.lual.sqlcmd.NamesAndPasswords;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -118,9 +119,9 @@ public class JDBCManagerTest {
         } catch (Exception e) {
             // Just catch
         }
-        Object[][] content = dbManager.getAllContent(table);
+        List<List> content = dbManager.getAllContent(table);
         dropTable();
-        assertEquals("[[Vasiliy, parol], [Marina, hook]]", Arrays.deepToString(content));
+        assertEquals("[[Vasiliy, parol], [Marina, hook]]", content.toString());
     }
 
     @Test
@@ -133,9 +134,9 @@ public class JDBCManagerTest {
         }
         DataSet key = new DataSet();
         key.put("name", "Vasiliy");
-        Object[][] content = dbManager.getFilteredContent(table, key);
+        List<List> content = dbManager.getFilteredContent(table, key);
         dropTable();
-        assertEquals("[[Vasiliy, parol]]", Arrays.deepToString(content));
+        assertEquals("[[Vasiliy, parol]]",content.toString());
     }
 
     @Test
@@ -147,9 +148,9 @@ public class JDBCManagerTest {
         } catch (Exception e) {
             // Just catch
         }
-        Object[][] content = dbManager.getAllContent(table);
+        List<List> content = dbManager.getAllContent(table);
         dropTable();
-        assertEquals("[]", Arrays.deepToString(content));
+        assertEquals("[]", content.toString());
     }
 
     @Test
@@ -163,9 +164,9 @@ public class JDBCManagerTest {
         DataSet key = new DataSet();
         key.put("name", "Vasiliy");
         dbManager.delete(table, key);
-        Object[][] content = dbManager.getAllContent(table);
+        List<List> content = dbManager.getAllContent(table);
         dropTable();
-        assertEquals("[[Marina, hook]]", Arrays.deepToString(content));
+        assertEquals("[[Marina, hook]]", content.toString());
     }
 
     @Test
@@ -181,8 +182,8 @@ public class JDBCManagerTest {
         DataSet update = new DataSet();
         update.put("password", "ChertPoberi");
         dbManager.update(table, update, key);
-        Object[][] content = dbManager.getAllContent(table);
+        List<List> content = dbManager.getAllContent(table);
         dropTable();
-        assertEquals("[[Marina, hook], [Vasiliy, ChertPoberi]]", Arrays.deepToString(content));
+        assertEquals("[[Marina, hook], [Vasiliy, ChertPoberi]]", content.toString());
     }
 }

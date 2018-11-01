@@ -6,8 +6,7 @@ import ua.kh.lual.sqlcmd.controller.command.Delete;
 import ua.kh.lual.sqlcmd.controller.command.Update;
 import ua.kh.lual.sqlcmd.model.DataSet;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,7 +24,10 @@ public class UpdateTest extends ABasicCommandTestClass {
     public void testUpdate() {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"8", "Ferdinand", "ww1"}});
+//        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"8", "Ferdinand", "ww1"}});
+        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new LinkedList<List>(Arrays.asList(
+                new ArrayList(Arrays.asList("8", "Ferdinand", "ww1"))
+        )));
         // when
         cmd.process("update|users|password|peace|name|Ferdinand");
         // then
@@ -43,7 +45,7 @@ public class UpdateTest extends ABasicCommandTestClass {
     public void testUpdateNothing() {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{});
+        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new LinkedList<List>());
         // when
         cmd.process("update|users|password|peace|name|Ferdinand");
         // then

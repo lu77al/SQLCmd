@@ -1,5 +1,6 @@
 package ua.kh.lual.sqlcmd.model;
 
+import java.util.List;
 import java.util.Set;
 
 public interface DatabaseManager {
@@ -12,9 +13,9 @@ public interface DatabaseManager {
 
     Set<String> getTableHeader(String tableName);
 
-    Object[][] getAllContent(String tableName);
+    List<List> getAllContent(String tableName);
 
-    Object[][] getFilteredContent(String tableName, DataSet key);
+    List<List> getFilteredContent(String tableName, DataSet key);
 
     void clearTable(String tableName);
 
