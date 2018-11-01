@@ -1,10 +1,7 @@
 package ua.kh.lual.sqlcmd.model;
 
-
 import java.sql.*;
 import java.util.*;
-
-import static ua.kh.lual.sqlcmd.utils.MyUtils.resizeArray;
 
 public class JDBCManager implements DatabaseManager {
 
@@ -32,7 +29,7 @@ public class JDBCManager implements DatabaseManager {
         }
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/" + database, user, password);
+                    "jdbc:postgresql:" + database, user, password);
         } catch (SQLException e) {
             connection = null;
             throw new JDBCManagerException(
