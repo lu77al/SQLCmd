@@ -5,6 +5,9 @@ import org.junit.Test;
 import ua.kh.lual.sqlcmd.controller.command.Clear;
 import ua.kh.lual.sqlcmd.controller.command.Create;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static org.mockito.Mockito.verify;
 
 public class CreateTest extends ABasicCommandTestClass {
@@ -20,7 +23,7 @@ public class CreateTest extends ABasicCommandTestClass {
         // when
         cmd.process("create|user|id|name|password");
         // then
-        verify(dbManager).createTable("user", new String[]{"id", "name", "password"});
+        verify(dbManager).createTable("user", new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
         verify(view).write("Table <user> was created successfully");
     }
 

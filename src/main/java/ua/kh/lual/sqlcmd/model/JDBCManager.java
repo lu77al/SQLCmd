@@ -140,10 +140,10 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void createTable(String tableName, String[] columns) {
+    public void createTable(String tableName, Set<String> columns) {
         String selectedTable = normalizeTableName(tableName);
         String sql = "CREATE TABLE " + selectedTable + " (" +
-                     prepareList("\"%s\" text", columns) + ")";
+                     prepareList_collection("\"%s\" text", columns) + ")";
         try {
             executeSQL(sql);
         } catch (SQLException e) {

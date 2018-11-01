@@ -5,6 +5,8 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Create extends UserCommandClass {
     @Override
@@ -21,7 +23,7 @@ public class Create extends UserCommandClass {
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            String[] columns = Arrays.copyOfRange(parameters, 1, parameters.length);
+            Set<String> columns = new LinkedHashSet<>(Arrays.asList(Arrays.copyOfRange(parameters, 1, parameters.length)));
             dbManager.createTable(table, columns);
             view.write("Table <" + table + "> was created successfully");
         } catch (JDBCManagerException e) {

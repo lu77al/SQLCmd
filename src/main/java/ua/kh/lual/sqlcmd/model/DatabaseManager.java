@@ -26,7 +26,7 @@ public interface DatabaseManager {
 
     void delete(String tableName, Map<String, Object> key);
 
-    void createTable(String tableName, String[] columns);
+    void createTable(String tableName, Set<String> columns);
 
     void dropTable(String tableName);
 

@@ -4,10 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ua.kh.lual.sqlcmd.NamesAndPasswords;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -24,7 +21,8 @@ public class JDBCManagerTest {
 
     private void createTable() {
         try {
-            dbManager.createTable(table, new String[]{"name", "password"});
+//            dbManager.createTable(table, new String[]{"name", "password"});
+            dbManager.createTable(table, new LinkedHashSet<String>(Arrays.asList("name", "password")));
         } catch (Exception e) {
             // Just catch
         }
@@ -63,7 +61,7 @@ public class JDBCManagerTest {
     public void testCreateTable() {
         boolean failed = false;
         try {
-            dbManager.createTable(table, new String[]{"name", "password"});
+            dbManager.createTable(table, new LinkedHashSet<String>(Arrays.asList("name", "password")));
         } catch (Exception e) {
             failed = true;
         }
