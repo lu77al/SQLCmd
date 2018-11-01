@@ -25,7 +25,7 @@ public class UpdateTest extends ABasicCommandTestClass {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
 //        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"8", "Ferdinand", "ww1"}});
-        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new LinkedList<List>(Arrays.asList(
+        when(dbManager.getFilteredContent(eq("users"), any(LinkedHashMap.class))).thenReturn(new LinkedList<List>(Arrays.asList(
                 new ArrayList(Arrays.asList("8", "Ferdinand", "ww1"))
         )));
         // when
@@ -38,19 +38,19 @@ public class UpdateTest extends ABasicCommandTestClass {
                 "+  8   +  Ferdinand  +    ww1     +\n" +
                 "+------+-------------+------------+\n" +
                 "Rows above where updated\n");
-        verify(dbManager).update(eq("users"), any(DataSet.class), any(DataSet.class));
+        verify(dbManager).update(eq("users"), any(LinkedHashMap.class), any(LinkedHashMap.class));
     }
 
     @Test
     public void testUpdateNothing() {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new LinkedList<List>());
+        when(dbManager.getFilteredContent(eq("users"), any(LinkedHashMap.class))).thenReturn(new LinkedList<List>());
         // when
         cmd.process("update|users|password|peace|name|Ferdinand");
         // then
         verify(view).write("Nothing matches key field. No update performed");
-        verify(dbManager, never()).update(anyString(), any(DataSet.class), any(DataSet.class));
+        verify(dbManager, never()).update(anyString(), any(LinkedHashMap.class), any(LinkedHashMap.class));
     }
 
 }

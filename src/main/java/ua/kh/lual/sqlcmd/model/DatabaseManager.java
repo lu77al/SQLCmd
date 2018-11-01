@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface DatabaseManager {
@@ -15,15 +16,15 @@ public interface DatabaseManager {
 
     List<List> getAllContent(String tableName);
 
-    List<List> getFilteredContent(String tableName, DataSet key);
+    List<List> getFilteredContent(String tableName, Map<String, Object> key);
 
     void clearTable(String tableName);
 
     void insert(String tableName, DataSet record);
 
-    void update(String tableName, DataSet update, DataSet where);
+    void update(String tableName, Map<String, Object> update, Map<String, Object> where);
 
-    void delete(String tableName, DataSet key);
+    void delete(String tableName, Map<String, Object> key);
 
     void createTable(String tableName, String[] columns);
 

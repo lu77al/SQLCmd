@@ -5,7 +5,9 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Delete extends UserCommandClass{
     @Override
@@ -22,7 +24,7 @@ public class Delete extends UserCommandClass{
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            DataSet whereRecord = new DataSet();
+            Map<String, Object> whereRecord = new LinkedHashMap<>();
             whereRecord.put(parameters[1], parameters[2]);
             List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.size() == 0) {

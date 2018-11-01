@@ -105,10 +105,10 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void update(String tableName, DataSet set, DataSet where) {
+    public void update(String tableName, Map<String, Object> set, Map<String, Object> where) {
         String selectedTable = normalizeTableName(tableName);
-        String setList = prepareList("\"%s\" = '%s'", ", ", set.getNames(), set.getValues());
-        String whereList = prepareList("\"%s\" = '%s'", ", ", where.getNames(), where.getValues());
+        String setList = prepareList("\"%s\" = '%s'", ", ", set.keySet(), set.values());
+        String whereList = prepareList("\"%s\" = '%s'", ", ", where.keySet(), where.values());
         try {
             executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
         } catch (SQLException e) {
@@ -117,9 +117,9 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public List<List> getFilteredContent(String tableName, DataSet key) {
+    public List<List> getFilteredContent(String tableName, Map<String, Object> key) {
         String selectedTable = normalizeTableName(tableName);
-        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
+        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.keySet(), key.values());
         String sql = "SELECT * FROM " + selectedTable + " WHERE " + whereList;
         try {
             return getTableContent(sql);
@@ -129,9 +129,9 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
-    public void delete(String tableName, DataSet key) {
+    public void delete(String tableName, Map<String, Object> key) {
         String selectedTable = normalizeTableName(tableName);
-        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.getNames(), key.getValues());
+        String whereList = prepareList("\"%s\" = '%s'", " AND ", key.keySet(), key.values());
         try {
             executeSQL("DELETE FROM " + selectedTable + " WHERE " + whereList);
         } catch (SQLException e) {
@@ -200,6 +200,19 @@ public class JDBCManager implements DatabaseManager {
         }
     }
 
+    private String prepareList(String item, String delimiter, Collection values1, Collection values2) {
+        StringBuilder list = new StringBuilder();
+        Iterator value2Iterator = values2.iterator();
+        for (Object value1: values1) {
+            Object value2 = value2Iterator.next();
+            list.append(String.format(item, value1.toString(), value2.toString()));
+            if (value2Iterator.hasNext()) {
+                list.append(delimiter);
+            }
+        }
+        return list.toString();
+    }
+
     private String prepareList(String item, Object[] values) {
         StringBuilder list = new StringBuilder();
         for (Object value : values) {
@@ -207,17 +220,6 @@ public class JDBCManager implements DatabaseManager {
             list.append(", ");
         }
         return list.substring(0, list.length() - 2);
-    }
-
-    private String prepareList(String item, String delimiter, Object[] values1, Object[] values2) {
-        StringBuilder list = new StringBuilder();
-        for (int i = 0; i < values1.length; i++) {
-            list.append(String.format(item, values1[i].toString(), values2[i].toString()));
-            if (i < values1.length -1) {
-                list.append(delimiter);
-            }
-        }
-        return list.toString();
     }
 }
 

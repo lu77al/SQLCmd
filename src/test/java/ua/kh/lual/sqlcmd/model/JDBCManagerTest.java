@@ -5,7 +5,9 @@ import org.junit.Test;
 import ua.kh.lual.sqlcmd.NamesAndPasswords;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -132,7 +134,7 @@ public class JDBCManagerTest {
         } catch (Exception e) {
             // Just catch
         }
-        DataSet key = new DataSet();
+        Map<String, Object> key = new LinkedHashMap<>();
         key.put("name", "Vasiliy");
         List<List> content = dbManager.getFilteredContent(table, key);
         dropTable();
@@ -161,7 +163,7 @@ public class JDBCManagerTest {
         } catch (Exception e) {
             // Just catch
         }
-        DataSet key = new DataSet();
+        Map<String, Object> key = new LinkedHashMap<>();
         key.put("name", "Vasiliy");
         dbManager.delete(table, key);
         List<List> content = dbManager.getAllContent(table);
@@ -177,9 +179,9 @@ public class JDBCManagerTest {
         } catch (Exception e) {
             // Just catch
         }
-        DataSet key = new DataSet();
+        Map<String, Object> key = new LinkedHashMap<>();
         key.put("name", "Vasiliy");
-        DataSet update = new DataSet();
+        Map<String, Object> update = new LinkedHashMap<>();
         update.put("password", "ChertPoberi");
         dbManager.update(table, update, key);
         List<List> content = dbManager.getAllContent(table);

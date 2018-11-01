@@ -32,7 +32,7 @@ public class DeleteTest extends ABasicCommandTestClass {
 //        DataSet key = new DataSet();
 //        key.put("name", "Marlen");
 //        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"3", "Marlen", "jasasyn"}});
-        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new LinkedList<List>(Arrays.asList(
+        when(dbManager.getFilteredContent(eq("users"), any(LinkedHashMap.class))).thenReturn(new LinkedList<List>(Arrays.asList(
                 new ArrayList(Arrays.asList("3", "Marlen", "jasasyn"))
         )));
 
@@ -46,7 +46,7 @@ public class DeleteTest extends ABasicCommandTestClass {
                 "+  3   +  Marlen  +  jasasyn   +\n" +
                 "+------+----------+------------+\n" +
                 "Rows above where deleted\n");
-        verify(dbManager).delete(eq("users"), any(DataSet.class));
+        verify(dbManager).delete(eq("users"), any(LinkedHashMap.class));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class DeleteTest extends ABasicCommandTestClass {
         cmd.process("delete|users|name|Marlen");
         // then
         verify(view).write("Nothing matches key field. No delete performed");
-        verify(dbManager, never()).delete(anyString(), any(DataSet.class));
+        verify(dbManager, never()).delete(anyString(), any(LinkedHashMap.class));
     }
 
 }

@@ -5,8 +5,7 @@ import ua.kh.lual.sqlcmd.model.DataSet;
 import ua.kh.lual.sqlcmd.model.JDBCManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Update extends UserCommandClass {
     @Override
@@ -28,7 +27,7 @@ public class Update extends UserCommandClass {
     protected void execute(String[] parameters) {
         try {
             String table = parameters[0];
-            DataSet whereRecord = new DataSet();
+            Map<String, Object> whereRecord= new LinkedHashMap<>();
             whereRecord.put(parameters[3], parameters[4]);
             List<List> updatePreviousState = dbManager.getFilteredContent(table, whereRecord);
             if (updatePreviousState.size() == 0) {
@@ -36,7 +35,7 @@ public class Update extends UserCommandClass {
                 return;
             }
             view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
-            DataSet updateRecord = new DataSet();
+            Map<String, Object> updateRecord= new LinkedHashMap<>();
             updateRecord.put(parameters[1], parameters[2]);
             dbManager.update(table, updateRecord, whereRecord);
             view.write("Rows above where updated");
