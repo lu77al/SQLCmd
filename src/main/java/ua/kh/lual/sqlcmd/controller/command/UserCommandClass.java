@@ -4,7 +4,9 @@ import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
 import ua.kh.lual.sqlcmd.view.View;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class UserCommandClass implements UserCommand{
     static View view;
@@ -30,9 +32,10 @@ public abstract class UserCommandClass implements UserCommand{
             throw new CommandFailedException("Please connect to database before using command " + command +
                     "\n\tUse command <" + new Connect().format());
         }
-        String[] result = command.split("\\|");
-        checkParametersCount(result.length - 1);
-        execute(Arrays.copyOfRange(result, 1, result.length));
+        List<String> chunks = new ArrayList<>(Arrays.asList(command.split("\\|")));
+        checkParametersCount(chunks.size() - 1);
+        execute(chunks.subList(1, chunks.size()).toArray(new String[0]));
+//        execute(Arrays.copyOfRange(result, 1, result.length));
     };
 
     @Override
