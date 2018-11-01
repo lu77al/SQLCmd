@@ -1,5 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Help extends UserCommandClass {
@@ -25,7 +27,7 @@ public class Help extends UserCommandClass {
         view.write("You can use next commands:");
         for (UserCommand cmd: commandList) {
             view.write("\t" + cmd.format());
-            String[] descriptions = cmd.description().split("\n");
+            List<String> descriptions = new LinkedList<>(Arrays.asList(cmd.description().split("\n")));
             for (String description: descriptions) {
                 view.write("\t\t" + description);
             }
