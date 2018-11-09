@@ -24,7 +24,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new JDBCManagerException("Can't process databases\n" +
+            throw new DBManagerException("Can't process databases\n" +
                      "\tPlease add postgresql-42.2.5.jar to project");
         }
         try {
@@ -32,7 +32,7 @@ public class JDBCManager implements DatabaseManager {
                     "jdbc:postgresql:" + database, user, password);
         } catch (SQLException e) {
             connection = null;
-            throw new JDBCManagerException(
+            throw new DBManagerException(
                     String.format("Can't get connection for database:<%s> user:<%s> password:<%s>",
                     database, user, password ));
         }
@@ -50,7 +50,7 @@ public class JDBCManager implements DatabaseManager {
             }
             return tables;
         } catch (SQLException e) {
-            throw new JDBCManagerException("Can't get tables names");
+            throw new DBManagerException("Can't get tables names");
         }
     }
 
@@ -65,7 +65,7 @@ public class JDBCManager implements DatabaseManager {
             }
             return columnNames;
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> header", selectedTable));
+            throw new DBManagerException(String.format("Can't get table <%s> header", selectedTable));
         }
     }
 
@@ -75,7 +75,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             return getTableContent("SELECT * FROM " + selectedTable);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
+            throw new DBManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
     }
 
@@ -85,7 +85,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL("DELETE FROM " + selectedTable);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't clear table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't clear table <%s>", selectedTable));
         }
     }
 
@@ -97,7 +97,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL("INSERT INTO " + selectedTable +" (" + names + ") VALUES (" + values + ")");
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't insert data into table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't insert data into table <%s>", selectedTable));
         }
     }
 
@@ -109,7 +109,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL("UPDATE " + selectedTable + " SET " + setList + " WHERE " + whereList);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't update table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't update table <%s>", selectedTable));
         }
     }
 
@@ -121,7 +121,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             return getTableContent(sql);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> content", selectedTable));
+            throw new DBManagerException(String.format("Can't get table <%s> content", selectedTable));
         }
     }
 
@@ -132,7 +132,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL("DELETE FROM " + selectedTable + " WHERE " + whereList);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't delete rows form table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't delete rows form table <%s>", selectedTable));
         }
     }
 
@@ -144,7 +144,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL(sql);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't create table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't create table <%s>", selectedTable));
         }
     }
 
@@ -154,7 +154,7 @@ public class JDBCManager implements DatabaseManager {
         try {
             executeSQL("DROP TABLE " + selectedTable);
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't drop table <%s>", selectedTable));
+            throw new DBManagerException(String.format("Can't drop table <%s>", selectedTable));
         }
     }
 
@@ -187,7 +187,7 @@ public class JDBCManager implements DatabaseManager {
             int size = rs.getInt(1);
             return size;
         } catch (SQLException e) {
-            throw new JDBCManagerException(String.format("Can't get table <%s> size", tableName));
+            throw new DBManagerException(String.format("Can't get table <%s> size", tableName));
         }
     }
 

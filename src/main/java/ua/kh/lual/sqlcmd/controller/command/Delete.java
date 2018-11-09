@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
 import java.util.LinkedHashMap;
@@ -33,7 +33,7 @@ public class Delete extends UserCommandClass{
             view.write(new TextTable(dbManager.getTableHeader(table), updatePreviousState, 2).toString());
             dbManager.delete(table, whereRecord);
             view.write("Rows above where deleted");
-        } catch (JDBCManagerException e) {
+        } catch (DBManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
 

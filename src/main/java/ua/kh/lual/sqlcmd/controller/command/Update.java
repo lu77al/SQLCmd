@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
 import java.util.*;
@@ -38,7 +38,7 @@ public class Update extends UserCommandClass {
             updateRecord.put(parameters.get(1), parameters.get(2));
             dbManager.update(table, updateRecord, whereRecord);
             view.write("Rows above where updated");
-        } catch (JDBCManagerException e) {
+        } catch (DBManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
     }

@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public class Create extends UserCommandClass {
             Set<String> columns = new LinkedHashSet<>(parameters.subList(1, parameters.size()));
             dbManager.createTable(table, columns);
             view.write("Table <" + table + "> was created successfully");
-        } catch (JDBCManagerException e) {
+        } catch (DBManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
     }

@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,7 +34,7 @@ public class Insert extends UserCommandClass {
             }
             dbManager.insert(table, insert);
             view.write("New data added successfully");
-        } catch (JDBCManagerException e) {
+        } catch (DBManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
     }

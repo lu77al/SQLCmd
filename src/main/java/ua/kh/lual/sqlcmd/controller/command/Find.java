@@ -1,7 +1,7 @@
 package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 import ua.kh.lual.sqlcmd.utils.TextTable;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class Find extends UserCommandClass {
             view.write(new TextTable(dbManager.getTableHeader(table),
                     dbManager.getAllContent(table),
                     2).toString());
-        } catch (JDBCManagerException e) {
+        } catch (DBManagerException e) {
             throw new CommandFailedException("JDBCManager error: " + e.getMessage());
         }
     }

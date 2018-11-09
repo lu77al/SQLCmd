@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ua.kh.lual.sqlcmd.controller.command.Clear;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
-import ua.kh.lual.sqlcmd.model.JDBCManagerException;
+import ua.kh.lual.sqlcmd.model.DBManagerException;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -88,11 +88,11 @@ public class ACommonFailsTest extends ABasicCommandTestClass {
     @Test
     public void TestProcessJDBCException() {
         // given
-        doThrow(new JDBCManagerException("JDBCException")).when(dbManager).clearTable(anyString());
+        doThrow(new DBManagerException("JDBCException")).when(dbManager).clearTable(anyString());
         // when
         try {
             cmd.process("clear|user");
-            fail("JDBCManagerException was expected, but wasn't thrown");
+            fail("DBManagerException was expected, but wasn't thrown");
         } catch (CommandFailedException e) {
         }
     }
