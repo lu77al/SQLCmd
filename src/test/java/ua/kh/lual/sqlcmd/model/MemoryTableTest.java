@@ -86,5 +86,45 @@ public class MemoryTableTest {
                 table.getContent().toString());
     }
 
+    @Test
+    public void updateTest() {
+        Map<String, Object> where = new LinkedHashMap<>();
+        Map<String, Object> update = new LinkedHashMap<>();
+
+        where.put("password", "parol");
+        update.put("password", "password");
+        table.update(update, where);
+        assertEquals( "[[1, Vasiliy, password]," +
+                        " [2, Marina, hook]," +
+                        " [3, null, password]," +
+                        " [4, Pasha, null]," +
+                        " [5, Boris, password]]",
+                table.getContent().toString());
+
+        where.put("password", "1234");
+        update.put("password", "5678");
+        table.update(update, where);
+        assertEquals( "[[1, Vasiliy, password]," +
+                        " [2, Marina, hook]," +
+                        " [3, null, password]," +
+                        " [4, Pasha, null]," +
+                        " [5, Boris, password]]",
+                table.getContent().toString());
+
+        where = new LinkedHashMap<>();
+        update = new LinkedHashMap<>();
+
+        where.put("id", "1");
+        update.put("name", "Alex");
+        update.put("password", "postgres");
+        table.update(update, where);
+        assertEquals( "[[1, Alex, postgres]," +
+                        " [2, Marina, hook]," +
+                        " [3, null, password]," +
+                        " [4, Pasha, null]," +
+                        " [5, Boris, password]]",
+                table.getContent().toString());
+    }
+
 
 }

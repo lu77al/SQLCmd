@@ -42,4 +42,12 @@ public class MemoryTable {
         content = new LinkedList<>();
     }
 
+    public void update(Map<String, Object> update, Map<String, Object> where) {
+        content.forEach(row -> {
+            if (row.entrySet().containsAll(where.entrySet())) {
+                row.putAll(update);
+            }
+        });
+    };
+
 }
