@@ -48,6 +48,18 @@ public class MemoryTable {
                 row.putAll(update);
             }
         });
-    };
+    }
+
+    public void delete(Map<String, Object> key) {
+        ArrayList<Integer> delete = new ArrayList<>();
+        int index = 0;
+        for (Map<String,Object> row: content) {
+            if (row.entrySet().containsAll(key.entrySet())) {
+                delete.add(0, index);
+            }
+            index++;
+        }
+        delete.forEach(deleteIndex -> content.remove((int)deleteIndex));
+    }
 
 }

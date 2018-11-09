@@ -126,5 +126,35 @@ public class MemoryTableTest {
                 table.getContent().toString());
     }
 
+    @Test
+    public void deleteTest() {
+        Map<String, Object> key = new LinkedHashMap<>();
+
+        key.put("password", "parol");
+        table.delete(key);
+        assertEquals( "[[2, Marina, hook]," +
+                        " [3, null, password]," +
+                        " [4, Pasha, null]]",
+                table.getContent().toString());
+
+        key = new LinkedHashMap<>();
+        key.put("id", "3");
+        key.put("name", null);
+        table.delete(key);
+        assertEquals( "[[2, Marina, hook]," +
+                        " [4, Pasha, null]]",
+                table.getContent().toString());
+
+        key = new LinkedHashMap<>();
+        key.put("id", "2");
+        table.delete(key);
+        assertEquals( "[[4, Pasha, null]]",
+                table.getContent().toString());
+
+        key.put("id", "8");
+        table.delete(key);
+        assertEquals( "[[4, Pasha, null]]",
+                table.getContent().toString());
+    }
 
 }
