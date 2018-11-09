@@ -12,6 +12,8 @@ public interface DatabaseManager {
 
     void connect(String database, String user, String password);
 
+    void disconnect();
+
     Set<String> getTableHeader(String tableName);
 
     List<List> getAllContent(String tableName);

@@ -39,6 +39,16 @@ public class JDBCManager implements DatabaseManager {
     }
 
     @Override
+    public void disconnect() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new DBManagerException("Can't disconnect form database");
+        }
+        connection = null;
+    }
+
+    @Override
     public Set<String> getTableNames() {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery("SELECT table_name FROM information_schema.tables" +

@@ -2,6 +2,7 @@ package ua.kh.lual.sqlcmd.controller.command;
 
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
+import ua.kh.lual.sqlcmd.model.MemoryDBManager;
 import ua.kh.lual.sqlcmd.view.View;
 
 import java.util.ArrayList;
@@ -11,13 +12,18 @@ import java.util.List;
 public abstract class UserCommandClass implements UserCommand{
     static View view;
     static DatabaseManager dbManager;
+    static DatabaseManager mainDBManager;
+    static DatabaseManager memoryDBManager = new MemoryDBManager();
 
     public static void setView(View view) {
         UserCommandClass.view = view;
     }
 
     public static void setDbManager(DatabaseManager dbManager) {
-        UserCommandClass.dbManager = dbManager;
+        if (!memoryDBManager.equals(UserCommandClass.dbManager)) {
+            UserCommandClass.dbManager = dbManager;
+        }
+        UserCommandClass.mainDBManager = dbManager;
     }
 
     @Override

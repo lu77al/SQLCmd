@@ -21,6 +21,11 @@ public class MemoryDBManager implements DatabaseManager {
         connected = true;
     }
 
+    @Override
+    public void disconnect() {
+        connected = false;
+    }
+
     private MemoryTable getTableByName(String tableName) {
         MemoryTable result = tables.get(tableName);
         if (result == null) {

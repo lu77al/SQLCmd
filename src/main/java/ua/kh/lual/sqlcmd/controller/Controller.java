@@ -1,6 +1,7 @@
 package ua.kh.lual.sqlcmd.controller;
 
 import ua.kh.lual.sqlcmd.controller.command.*;
+import ua.kh.lual.sqlcmd.controller.command.Main;
 import ua.kh.lual.sqlcmd.controller.exceptions.CommandFailedException;
 import ua.kh.lual.sqlcmd.controller.exceptions.ExitException;
 import ua.kh.lual.sqlcmd.model.DatabaseManager;
@@ -23,6 +24,8 @@ public class Controller {
 
         Help help = new Help();
         commands.add(new Connect());
+        commands.add(new Memory());
+        commands.add(new Main());
         commands.add(new Tables());
         commands.add(new Find());
         commands.add(new Clear());
