@@ -1,10 +1,9 @@
 package ua.kh.lual.sqlcmd.model;
 
-public class JDBCManagerTest extends DBManagerTest {
-
+public class MemoryDBManagerTest extends DBManagerTest {
     @Override
     public void setup() {
-        dbManager = new JDBCManager();
+        dbManager = new MemoryDBManager();
         dbManager.connect(database, user, password);
     }
 }
