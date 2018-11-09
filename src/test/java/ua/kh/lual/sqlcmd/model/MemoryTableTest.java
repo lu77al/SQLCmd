@@ -79,4 +79,12 @@ public class MemoryTableTest {
                 table.getFilteredContent(key).toString());
     }
 
+    @Test
+    public void clearTest() {
+        table.clear();
+        assertEquals( "[]",
+                table.getContent().toString());
+    }
+
+
 }

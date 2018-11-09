@@ -38,4 +38,8 @@ public class MemoryTable {
         return result;
     }
 
+    public void clear() {
+        content = new LinkedList<>();
+    }
+
 }
