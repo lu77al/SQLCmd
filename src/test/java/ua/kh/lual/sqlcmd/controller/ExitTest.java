@@ -17,7 +17,6 @@ public class ExitTest extends ABasicCommandTestClass {
 
     @Test
     public void testExit() {
-        // given
         // when
         try {
             cmd.process("exit");

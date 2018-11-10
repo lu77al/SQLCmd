@@ -23,11 +23,7 @@ public class DeleteTest extends ABasicCommandTestClass {
 
     @Test
     public void testDelete() {
-        // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-//        DataSet key = new DataSet();
-//        key.put("name", "Marlen");
-//        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"3", "Marlen", "jasasyn"}});
         when(dbManager.getFilteredContent(eq("users"), any(LinkedHashMap.class))).thenReturn(new LinkedList<List>(Arrays.asList(
                 new ArrayList(Arrays.asList("3", "Marlen", "jasasyn"))
         )));
@@ -49,11 +45,7 @@ public class DeleteTest extends ABasicCommandTestClass {
     public void testDeleteNothing() {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-//        DataSet key = new DataSet();
-//        key.put("name", "Marlen");
-//        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{});
         when(dbManager.getAllContent("user")).thenReturn(new LinkedList<List>());
-
         // when
         cmd.process("delete|users|name|Marlen");
         // then

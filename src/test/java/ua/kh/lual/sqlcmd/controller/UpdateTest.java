@@ -22,7 +22,6 @@ public class UpdateTest extends ABasicCommandTestClass {
     public void testUpdate() {
         // given
         when(dbManager.getTableHeader("users")).thenReturn(new LinkedHashSet<String>(Arrays.asList("id", "name", "password")));
-//        when(dbManager.getFilteredContent(eq("users"), any(DataSet.class))).thenReturn(new Object[][]{{"8", "Ferdinand", "ww1"}});
         when(dbManager.getFilteredContent(eq("users"), any(LinkedHashMap.class))).thenReturn(new LinkedList<List>(Arrays.asList(
                 new ArrayList(Arrays.asList("8", "Ferdinand", "ww1"))
         )));

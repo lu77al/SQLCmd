@@ -19,10 +19,11 @@ public class Controller {
     public Controller(View view, DatabaseManager dbManager) {
         this.view = view;
 
-        UserCommandClass.setDbManager(dbManager);
         UserCommandClass.setView(view);
+        UserCommandClass.setDbManager(dbManager);
 
         Help help = new Help();
+
         commands.add(new Connect());
         commands.add(new Memory());
         commands.add(new Main());
@@ -37,6 +38,7 @@ public class Controller {
         commands.add(new Exit());
         commands.add(new Test());
         commands.add(help);
+
         help.setCommandList(commands);
     }
 

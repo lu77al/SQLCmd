@@ -33,6 +33,16 @@ public abstract class UserCommandClass implements UserCommand{
     public abstract String description();
 
     @Override
+    public boolean canProcess(String command) {
+        List<String> estimated = new ArrayList<>(Arrays.asList(format().split("\\|")));
+        List<String> entered = new ArrayList<>(Arrays.asList(command.split("\\|")));
+        if (entered.size() == 0) {
+            return false;
+        }
+        return estimated.get(0).equals(entered.get(0));
+    }
+
+    @Override
     public void process(String command) {
         if (requestsConnection()) {
             throw new CommandFailedException("Please connect to database before using command " + command +
@@ -41,16 +51,6 @@ public abstract class UserCommandClass implements UserCommand{
         List<String> chunks = new ArrayList<>(Arrays.asList(command.split("\\|")));
         checkParametersCount(chunks.size() - 1);
         execute(chunks.subList(1, chunks.size()));
-    };
-
-    @Override
-    public boolean canProcess(String command) {
-        List<String> estimated = new ArrayList<>(Arrays.asList(format().split("\\|")));
-        List<String> entered = new ArrayList<>(Arrays.asList(command.split("\\|")));
-        if (entered.size() == 0) {
-            return false;
-        }
-        return estimated.get(0).equals(entered.get(0));
     }
 
     protected abstract void execute(List<String> parameters);

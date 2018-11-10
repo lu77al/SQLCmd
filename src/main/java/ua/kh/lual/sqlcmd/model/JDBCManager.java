@@ -102,8 +102,8 @@ public class JDBCManager implements DatabaseManager {
     @Override
     public void insert(String tableName, Map<String, Object> row) {
         String selectedTable = normalizeTableName(tableName);
-        String names = prepareList_collection("\"%s\"", row.keySet());
-        String values = prepareList_collection("'%s\'", row.values());
+        String names = prepareList("\"%s\"", row.keySet());
+        String values = prepareList("'%s\'", row.values());
         try {
             executeSQL("INSERT INTO " + selectedTable +" (" + names + ") VALUES (" + values + ")");
         } catch (SQLException e) {
@@ -150,7 +150,7 @@ public class JDBCManager implements DatabaseManager {
     public void createTable(String tableName, Set<String> columns) {
         String selectedTable = normalizeTableName(tableName);
         String sql = "CREATE TABLE " + selectedTable + " (" +
-                     prepareList_collection("\"%s\" text", columns) + ")";
+                     prepareList("\"%s\" text", columns) + ")";
         try {
             executeSQL(sql);
         } catch (SQLException e) {
@@ -189,18 +189,6 @@ public class JDBCManager implements DatabaseManager {
         }
     }
 
-    private int getTableSize(String tableName) {
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + tableName))
-        {
-            rs.next();
-            int size = rs.getInt(1);
-            return size;
-        } catch (SQLException e) {
-            throw new DBManagerException(String.format("Can't get table <%s> size", tableName));
-        }
-    }
-
     private void executeSQL(String query) throws SQLException {
         try (Statement st = connection.createStatement()) {
             st.executeUpdate(query);
@@ -220,16 +208,7 @@ public class JDBCManager implements DatabaseManager {
         return list.toString();
     }
 
-    private String prepareList(String item, Object[] values) {
-        StringBuilder list = new StringBuilder();
-        for (Object value : values) {
-            list.append(String.format(item, value.toString()));
-            list.append(", ");
-        }
-        return list.substring(0, list.length() - 2);
-    }
-
-    private String prepareList_collection(String item, Collection values) {
+    private String prepareList(String item, Collection values) {
         StringBuilder list = new StringBuilder();
         for (Object value : values) {
             list.append(String.format(item, value.toString()));

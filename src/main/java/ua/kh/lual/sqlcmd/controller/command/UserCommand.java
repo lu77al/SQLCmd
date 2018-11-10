@@ -6,12 +6,12 @@ import ua.kh.lual.sqlcmd.view.View;
 
 public interface UserCommand {
 
-    String format();
-
-    String description();
-
     boolean canProcess(String command);
 
     void process(String command) throws CommandFailedException;
+
+    String format();
+
+    String description();
 
 }

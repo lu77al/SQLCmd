@@ -26,6 +26,9 @@ public class Test extends UserCommandClass {
         } else {
             view.write("Test to execute:  <" + testId + ">");
         }
+        if (testId.equals("0")) {
+            testId = "startupDefaultTest";
+        }
         if (testId.equals("startupDefaultTest")) {
             startupDefaultTest();
             return;

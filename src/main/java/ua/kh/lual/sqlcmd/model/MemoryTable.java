@@ -16,12 +16,6 @@ public class MemoryTable {
         return new LinkedHashSet<>(headerRow.keySet());
     }
 
-    public void insert(Map<String, Object> record) {
-        Map<String, Object> row = new LinkedHashMap<>(headerRow);
-        row.putAll(record);
-        content.add(row);
-    }
-
     public List<List> getContent() {
         List<List> result = new LinkedList<>();
         content.forEach(row -> result.add(new ArrayList<Object>(row.values())));
@@ -38,8 +32,10 @@ public class MemoryTable {
         return result;
     }
 
-    public void clear() {
-        content = new LinkedList<>();
+    public void insert(Map<String, Object> record) {
+        Map<String, Object> row = new LinkedHashMap<>(headerRow);
+        row.putAll(record);
+        content.add(row);
     }
 
     public void update(Map<String, Object> update, Map<String, Object> where) {
@@ -60,6 +56,10 @@ public class MemoryTable {
             index++;
         }
         delete.forEach(deleteIndex -> content.remove((int)deleteIndex));
+    }
+
+    public void clear() {
+        content = new LinkedList<>();
     }
 
 }
