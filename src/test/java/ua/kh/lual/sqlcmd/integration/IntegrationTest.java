@@ -132,6 +132,10 @@ public class IntegrationTest {
                 "You can use next commands:\n" +
                 "\tconnect|database|user|password\n" +
                 "\t\tConnects to database database as user user with password password\n" +
+                "\tmemory\n" +
+                "\t\tFor switching to memory database manager realization\n" +
+                "\tmain\n" +
+                "\t\tFor switching to main (usually postgress) database manager realization\n"+
                 "\ttables\n" +
                 "\t\tPrints tables names of connected database\n" +
                 "\tfind|tableName\n" +
@@ -436,6 +440,47 @@ public class IntegrationTest {
         assertEquals(5, actual);
     }
 
+    @Test
+    public void testSwitchMemoryMain() {
+        // given
+        in.userTypes("find|qwertypasdf");
+        connectDB();
+        in.userTypes("find|qwertypasdf");
+        in.userTypes("memory");
+        in.userTypes("find|qwertypasdf");
+        in.userTypes("main");
+        in.userTypes("find|qwertypasdf");
+        exitApp();
+        // after
+        expected =
+                "find|qwertypasdf\n" +
+                "Command failed\n" +
+                "Please connect to database before using command find|qwertypasdf\n" +
+                "\tUse command connect|database|user|password\n" +
+                askCommandReport() +
+                connectReport() +
+                "find|qwertypasdf\n" +
+                "Command failed\n" +
+                "JDBCManager error: Can't get table \"qwertypasdf\" header\n" +
+                askCommandReport() +
+                "memory\n" +
+                "You have switched to memory database manager realization\n" +
+                askCommandReport() +
+                "find|qwertypasdf\n" +
+                "Command failed\n" +
+                "Please connect to database before using command find|qwertypasdf\n" +
+                "\tUse command connect|database|user|password\n" +
+                askCommandReport() +
+                "main\n" +
+                "You have switched to main database manager realization\n" +
+                askCommandReport() +
+                "find|qwertypasdf\n" +
+                "Command failed\n" +
+                "JDBCManager error: Can't get table \"qwertypasdf\" header\n" +
+                askCommandReport();
+        // execute and check
+        performTest();
+    }
 
 
     private void fillTable() {
