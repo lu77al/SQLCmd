@@ -184,4 +184,11 @@ public abstract class DBManagerTest {
         assertTrue(content.toString().contains("[Marina, hook]"));
         assertTrue(content.toString().contains("[Vasiliy, ChertPoberi]"));
     }
+
+    @Test
+    public void testDisconnect() {
+        dbManager.disconnect();
+        assertFalse(dbManager.isConnected());
+    }
+
 }
